@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 5372b8dec86be4dc7895e858807f2e16
+timeCreated: 1471794280
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Brandon Grotesque
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 285457886e98948c091113e26ba30901, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
