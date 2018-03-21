@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class _TimeControl : MonoBehaviour
 {
+    /// Called when speed is changed by _TimeControl.
     public event Action OnSpeedChange = delegate { };
+    /// Returns the int that time is being divided by.
+    public int timeFraction { get { return timeDivisions[scaleIndex]; } private set { } }
+
     private _Input input;
     private int scaleIndex = 0;
     private int[] timeDivisions = { 1, 2, 4, 8, 16, 32, 64, 100, 500, 1000 };
@@ -25,10 +29,6 @@ public class _TimeControl : MonoBehaviour
         }
     }
 
-    public void Init()
-    {
-    }
-
     private void OnDisable()
     {
         if (input != null)
@@ -36,11 +36,6 @@ public class _TimeControl : MonoBehaviour
             input.OnTimeSpeedUp -= SpeedUpTime;
             input.OnTimeSpeedDown -= SlowDownTime;
         }
-    }
-
-    public int GetTimeScale()
-    {
-        return timeDivisions[scaleIndex];
     }
     private void SlowDownTime()
     {

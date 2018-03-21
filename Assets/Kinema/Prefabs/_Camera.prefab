@@ -21,11 +21,11 @@ GameObject:
   - component: {fileID: 4363229942540036}
   - component: {fileID: 20130815926576098}
   - component: {fileID: 81973191160225738}
+  - component: {fileID: 114289983787796622}
   - component: {fileID: 114301964904186392}
   - component: {fileID: 114754454108396432}
-  - component: {fileID: 114289983787796622}
   - component: {fileID: 114884517939231822}
-  - component: {fileID: 135173817577466662}
+  - component: {fileID: 114255631081111058}
   m_Layer: 0
   m_Name: _Camera
   m_TagString: MainCamera
@@ -155,6 +155,18 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1347555483533260}
   m_Enabled: 1
+--- !u!114 &114255631081111058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1347555483533260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98a75c941d67b4e248621ceff3d6c7cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  letterboxAspect: 2.35
 --- !u!114 &114289983787796622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -239,10 +251,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   normalSpeed: 8
-  shiftSpeed: 25
+  fastSpeed: 20
   sensitivity: 180
-  resetPosition: 0
-  letterboxAspect: 2.35
 --- !u!114 &114884517939231822
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -254,15 +264,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c75ed1ee89d4a57b43904c3f65c644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!135 &135173817577466662
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1347555483533260}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.2
-  m_Center: {x: 0, y: 0, z: 0}

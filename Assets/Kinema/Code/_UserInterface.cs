@@ -101,7 +101,7 @@ public class _UserInterface : MonoBehaviour
     private void DisplayTimeScale()
     {
         StopCoroutine(co4);
-        co4 = ShowText(TimeScaleText, "TIME: 1 / ", timeControl.GetTimeScale().ToString());
+        co4 = ShowText(TimeScaleText, "TIME: 1 / ", timeControl.timeFraction.ToString());
         StartCoroutine(co4);
     }
     private IEnumerator ShowText(Text uiText, string textPrefix, string text)
@@ -127,5 +127,4 @@ public class _UserInterface : MonoBehaviour
 
         uiText.color = endColor;
     }
-
 }

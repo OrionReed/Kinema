@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System.Linq;
 
 public class _PersistentObjects : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class _PersistentObjects : MonoBehaviour
 
     [SerializeField]
     private GameObject[] spawnObjects;
-    private List<Component> persistents;
+    private IList<IInitializeOnReload> reinitializeOnLoad;
 
     void OnEnable() { SceneManager.sceneLoaded += OnLevelFinishedLoading; }
     void OnDisable() { SceneManager.sceneLoaded -= OnLevelFinishedLoading; }
@@ -27,12 +28,17 @@ public class _PersistentObjects : MonoBehaviour
     }
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
-        // Re-Initialize if neccesary
+        for (int i = 0; i < reinitializeOnLoad.Count; i++)
+        {
+            reinitializeOnLoad[i].InitOnSceneLoad();
+        }
     }
 
     void SpawnObjects()
     {
         for (int i = 0; i < spawnObjects.Length; i++)
             Instantiate(spawnObjects[i], spawnObjects[i].transform.position, spawnObjects[i].transform.rotation);
+        reinitializeOnLoad = InterfaceFinder.FindObjects<IInitializeOnReload>();
+        Debug.Log("reinits: " + reinitializeOnLoad.Count);
     }
 }

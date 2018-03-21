@@ -50,10 +50,6 @@ public class _Input : MonoBehaviour
         fastCamera = false;
     }
 
-    public void Init()
-    {
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(SelectionMode))

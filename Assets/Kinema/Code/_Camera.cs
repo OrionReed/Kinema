@@ -5,49 +5,42 @@ using System;
 using UnityEngine.SceneManagement;
 
 /// Moves the main camera
-public class _Camera : MonoBehaviour
+public class _Camera : MonoBehaviour, IInitializeOnReload
 {
     public event Action OnModeUpdate = delegate { };
     public enum CameraModeEnum { Follow, Orbit, Free, MAX }
     public CameraModeEnum cameraMode { get; private set; }
 
     [SerializeField]
+    private float sensitivity = 0.3f;
+
+    [Header("Follow Mode")]
+    [SerializeField]
+    private float followSpeed = 2;
+
+    [Header("Orbit Mode")]
+    [SerializeField]
+    private float defaultDistance = 5;
+
+    [Header("Free Mode")]
+    [SerializeField]
     private float normalSpeed = 5.0f;
     [SerializeField]
-    private float shiftSpeed = 20.0f;
-    [SerializeField]
-    private float sensitivity = 0.3f;
-    [SerializeField]
-    private bool resetPosition = false;
-    [SerializeField]
-    private float letterboxAspect = 21.0f / 9.0f;
+    private float fastSpeed = 20.0f;
 
     private static _Input input;
-    private Camera cam;
+    private K_NodeMap nodeMap;
     private float rotationX = 0f;
     private float rotationY = 0f;
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(this);
-        cam = GetComponent<Camera>();
-    }
-
+    private void Awake() { DontDestroyOnLoad(this); }
     private void Start()
     {
         input = FindObjectOfType<_Input>();
         input.OnCameraMode += UpdateCameraMode;
-        input.OnLetterbox += ToggleLetterbox;
     }
-
-    public void Init()
-    {
-    }
-    private void OnDisable()
-    {
-        input.OnCameraMode -= UpdateCameraMode;
-        input.OnLetterbox -= ToggleLetterbox;
-    }
+    public void InitOnSceneLoad() { nodeMap = FindObjectOfType<K_NodeMap>(); }
+    private void OnDisable() { input.OnCameraMode -= UpdateCameraMode; }
 
     private void UpdateCameraMode()
     {
@@ -55,28 +48,43 @@ public class _Camera : MonoBehaviour
         if (cameraMode == CameraModeEnum.MAX)
             cameraMode = 0;
         OnModeUpdate();
-        Debug.Log("Updating Camera Mode...");
     }
 
     private void Update()
     {
-        if (input.controlCamera)
+        switch (cameraMode)
         {
-            RotateCamera();
-            MoveCamera();
+            case CameraModeEnum.Free:
+                if (input.controlCamera)
+                {
+                    FreeRotateCamera();
+                    FreeMoveCamera();
+                }
+                break;
+
+            case CameraModeEnum.Orbit:
+                OrbitMoveCamera();
+                if (input.controlCamera)
+                    OrbitRotateCamera();
+                break;
+
+            case CameraModeEnum.Follow:
+                FollowMoveCamera();
+                FollowRotateCamera();
+                break;
         }
     }
 
-    private void MoveCamera()
+    private void FreeMoveCamera()
     {
         if (input.fastCamera)
-            transform.Translate(input.inputDirection * shiftSpeed * Time.deltaTime / Time.timeScale);
+            transform.Translate(input.inputDirection * fastSpeed * Time.deltaTime / Time.timeScale);
         else
             transform.Translate(input.inputDirection * normalSpeed * Time.deltaTime / Time.timeScale);
 
         Vector3 newPosition = transform.position;
     }
-    private void RotateCamera()
+    private void FreeRotateCamera()
     {
         rotationX += input.mouseAxis.x * sensitivity * Time.deltaTime;
         rotationY += input.mouseAxis.y * sensitivity * Time.deltaTime;
@@ -84,17 +92,20 @@ public class _Camera : MonoBehaviour
         transform.localRotation = Quaternion.AngleAxis(rotationX, Vector3.up);
         transform.localRotation *= Quaternion.AngleAxis(rotationY, Vector3.left);
     }
-
-    private void ToggleLetterbox()
+    private void OrbitMoveCamera()
     {
-        float screenAspect = (float)Screen.width / (float)Screen.height;
-        float aspectHeight = screenAspect / letterboxAspect;
-        Rect rect = cam.rect;
-        bool isLetterboxed = (cam.rect.height == aspectHeight);
-        rect.width = 1.0f;
-        rect.x = 0;
-        rect.height = isLetterboxed ? (float)Screen.height : aspectHeight;
-        rect.y = (1 - (isLetterboxed ? (float)Screen.height : aspectHeight)) / 2;
-        cam.rect = rect;
+        transform.LookAt(nodeMap.CenterOfMass());
+    }
+    private void OrbitRotateCamera()
+    {
+
+    }
+    private void FollowMoveCamera()
+    {
+
+    }
+    private void FollowRotateCamera()
+    {
+
     }
 }
