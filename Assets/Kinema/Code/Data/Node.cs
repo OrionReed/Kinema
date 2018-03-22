@@ -4,7 +4,6 @@ using UnityEngine;
 [Serializable]
 public class PlayerNode
 {
-    public GameObject gameObj;
     [HideInInspector]
     public Transform transform;
     [HideInInspector]
@@ -22,11 +21,12 @@ public class PlayerNode
     [HideInInspector]
     public Quaternion originalRotation;
 
-    public JointDrive driveMode;
-
+    public GameObject gameObj;
     public float spring = 30;
     public float damper = 5;
     public Vector3 initialVelocity;
+    public float maxImpactForce = 10;
+    public float currentImpactForce = 0;
 
     public void SetCoords(int CoordX, int CoordY)
     {

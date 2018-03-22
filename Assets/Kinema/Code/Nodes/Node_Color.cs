@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class K_Color : MonoBehaviour
+public class Node_Color : MonoBehaviour
 {
     [SerializeField]
     private Color SelectionNone = Color.white;
@@ -17,15 +17,26 @@ public class K_Color : MonoBehaviour
     [SerializeField]
     private float ColorLerpTime = 0.1f;
 
-    private K_NodeMap nodeMap;
+    private Node_Map nodeMap;
 
-    void Awake()
+    private void Awake()
     {
-        nodeMap = GetComponent<K_NodeMap>();
-        GetComponent<K_Selection>().OnSelectionUpdate += UpdateColor;
+        nodeMap = GetComponent<Node_Map>();
+        GetComponent<Node_Selection>().OnSelectionUpdate += UpdateSelectionColor;
+        GetComponent<Node_Health>().OnImpact += UpdateHealthColor;
     }
 
-    void UpdateColor()
+    private void UpdateHealthColor()
+    {
+        for (int i = 0; i < nodeMap.nodes.Count; i++)
+        {
+            IEnumerator coroutine = LerpToColor(ColorLerpTime, Color.red, nodeMap.nodes[i].Data.renderer.material);
+            if (nodeMap.nodes[i].Data.currentImpactForce == 1)
+                StartCoroutine(coroutine);
+        }
+    }
+
+    private void UpdateSelectionColor()
     {
         Color selectionColor = Color.magenta;
 
@@ -50,7 +61,7 @@ public class K_Color : MonoBehaviour
         }
     }
 
-    public IEnumerator LerpToColor(float timeForEffect, Color endColor, Material materialInstance)
+    private IEnumerator LerpToColor(float timeForEffect, Color endColor, Material materialInstance)
     {
         Color startColor = materialInstance.color;
         float elapsed = 0f;

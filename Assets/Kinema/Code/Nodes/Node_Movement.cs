@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class K_Movement : MonoBehaviour
+public class Node_Movement : MonoBehaviour
 {
     public event Action OnModeUpdate = delegate { };
     public enum ForceModeEnum { Position, Speed, Contact, MAX };
@@ -12,7 +12,7 @@ public class K_Movement : MonoBehaviour
     [SerializeField]
     private Material GhostMaterial;
     private _Input input;
-    private K_Selection selection;
+    private Node_Selection selection;
     private Quaternion rootTargetRotation = Quaternion.identity;
     private GameObject ghostLimb;
 
@@ -29,7 +29,7 @@ public class K_Movement : MonoBehaviour
     private void Start()
     {
         input = FindObjectOfType<_Input>();
-        selection = GetComponent<K_Selection>();
+        selection = GetComponent<Node_Selection>();
         input.OnForceMode += UpdateForceMode;
     }
     private void OnDisable()
@@ -67,7 +67,6 @@ public class K_Movement : MonoBehaviour
 
     private void ChainMovement(TreeNode<PlayerNode> root, List<TreeNode<PlayerNode>> chain)
     {
-        Debug.Log("Updating Chain Movement");
         rootTargetRotation = Quaternion.Inverse(root.Parent.Data.transform.rotation) * (root.Data.transform.rotation * input.inputRotation);
         QuaternionUtils.SetTargetRotationLocal(root.Data.joint, rootTargetRotation, root.Data.originalRotation);
 

@@ -28,17 +28,15 @@ public class _PersistentObjects : MonoBehaviour
     }
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
-        for (int i = 0; i < reinitializeOnLoad.Count; i++)
-        {
-            reinitializeOnLoad[i].InitOnSceneLoad();
-        }
+        foreach (IInitializeOnReload init in reinitializeOnLoad)
+            init.InitOnSceneLoad();
     }
 
     void SpawnObjects()
     {
-        for (int i = 0; i < spawnObjects.Length; i++)
-            Instantiate(spawnObjects[i], spawnObjects[i].transform.position, spawnObjects[i].transform.rotation);
+        foreach (GameObject obj in spawnObjects)
+            Instantiate(obj, obj.transform.position, obj.transform.rotation);
+
         reinitializeOnLoad = InterfaceFinder.FindObjects<IInitializeOnReload>();
-        Debug.Log("reinits: " + reinitializeOnLoad.Count);
     }
 }

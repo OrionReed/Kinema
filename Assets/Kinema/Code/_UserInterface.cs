@@ -9,8 +9,8 @@ using UnityEngine.SceneManagement;
 public class _UserInterface : MonoBehaviour
 {
     private _Camera cam;
-    private K_Selection selection;
-    private K_Movement movement;
+    private Node_Selection selection;
+    private Node_Movement movement;
     private _TimeControl timeControl;
 
     [SerializeField]
@@ -60,9 +60,9 @@ public class _UserInterface : MonoBehaviour
     {
         cam = FindObjectOfType<_Camera>();
         cam.OnModeUpdate += DisplayCameraState;
-        selection = FindObjectOfType<K_Selection>();
+        selection = FindObjectOfType<Node_Selection>();
         selection.OnModeUpdate += DisplaySelectionState;
-        movement = FindObjectOfType<K_Movement>();
+        movement = FindObjectOfType<Node_Movement>();
         movement.OnModeUpdate += DisplayForceState;
         timeControl = FindObjectOfType<_TimeControl>();
         timeControl.OnSpeedChange += DisplayTimeScale;

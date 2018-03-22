@@ -250,9 +250,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 831a6507e9a654c538b7c8dd45565479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalSpeed: 8
-  fastSpeed: 20
-  sensitivity: 180
+  mouseSensitivity: 180
+  freeNormalSpeed: 5
+  freeFastSpeed: 20
+  followRotateSpeed: 4
+  followMoveSpeed: 4
+  followDistance: 8
+  fixedRotateSpeed: 8
 --- !u!114 &114884517939231822
 MonoBehaviour:
   m_ObjectHideFlags: 1

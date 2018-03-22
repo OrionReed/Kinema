@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class K_Gizmos : MonoBehaviour
+public class Node_Gizmos : MonoBehaviour
 {
-    private K_NodeMap nodeMap;
-    private K_Selection selection;
+    private Node_Map nodeMap;
+    private Node_Selection selection;
     [SerializeField]
     private Color PivotGizmoColor = Color.blue;
     [SerializeField]
@@ -13,8 +13,8 @@ public class K_Gizmos : MonoBehaviour
 
     private void Awake()
     {
-        nodeMap = GetComponent<K_NodeMap>();
-        selection = GetComponent<K_Selection>();
+        nodeMap = GetComponent<Node_Map>();
+        selection = GetComponent<Node_Selection>();
     }
 
     private void OnDrawGizmos()
@@ -25,7 +25,7 @@ public class K_Gizmos : MonoBehaviour
 
     void DrawRuntimeGizmos()
     {
-        Gizmos.DrawSphere(nodeMap.CenterOfMass(), 0.1f);
+        Gizmos.DrawSphere(nodeMap.GetCenterOfMass(), 0.1f);
         if (selection.rootFollow != null && selection.rootFollow.Parent != null)
         {
             PlayerNode root = selection.rootFollow.Data;

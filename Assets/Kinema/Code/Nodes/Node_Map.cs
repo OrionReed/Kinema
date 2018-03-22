@@ -3,9 +3,10 @@ using UnityEngine;
 using System;
 
 /// Stores initialized player node map and node information
-public class K_NodeMap : MonoBehaviour
+public class Node_Map : MonoBehaviour
 {
     public List<TreeNode<PlayerNode>> nodes { get; private set; }
+
     private TreeNode<PlayerNode> root;
     [SerializeField]
     private bool InitGravity;
@@ -91,8 +92,7 @@ public class K_NodeMap : MonoBehaviour
                 d.positionSpring = root.spring;
                 d.positionDamper = root.damper;
                 d.maximumForce = Mathf.Infinity;
-                root.driveMode = d;
-                root.joint.slerpDrive = root.driveMode;
+                root.joint.slerpDrive = d;
                 root.joint.xMotion = ConfigurableJointMotion.Locked;
                 root.joint.yMotion = ConfigurableJointMotion.Locked;
                 root.joint.zMotion = ConfigurableJointMotion.Locked;
@@ -109,7 +109,22 @@ public class K_NodeMap : MonoBehaviour
         }
     }
 
-    #region Utilities
+    #region Public Utilities
+    /// Center of mass in world-space.
+    public Vector3 GetCenterOfMass()
+    {
+        Vector3 CoM = Vector3.zero;
+        float sumOfWeights = 0f;
+
+        foreach (TreeNode<PlayerNode> node in nodes)
+        {
+            Rigidbody r = node.Data.rigidbody;
+            CoM += r.worldCenterOfMass * r.mass;
+            sumOfWeights += r.mass;
+        }
+        CoM /= sumOfWeights;
+        return CoM;
+    }
     /// Returns node this Transform belongs to, null if none is found.
     public TreeNode<PlayerNode> GetFromTransform(Transform transform)
     {
@@ -147,21 +162,6 @@ public class K_NodeMap : MonoBehaviour
             nodes.AddRange(GetChildren(childNode));
         }
         return nodes;
-    }
-    /// Returns center of mass in world-space.
-    public Vector3 CenterOfMass()
-    {
-        Vector3 CoM = Vector3.zero;
-        float sumOfWeights = 0f;
-
-        foreach (TreeNode<PlayerNode> node in nodes)
-        {
-            Rigidbody r = node.Data.rigidbody;
-            CoM += r.worldCenterOfMass * r.mass;
-            sumOfWeights += r.mass;
-        }
-        CoM /= sumOfWeights;
-        return CoM;
     }
     #endregion
 }

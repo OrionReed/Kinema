@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 /// Sets and stores selection state of player nodes
-public class K_Selection : MonoBehaviour
+public class Node_Selection : MonoBehaviour
 {
     public event Action OnSelectionUpdate = delegate { };
     public event Action OnModeUpdate = delegate { };
@@ -17,12 +17,12 @@ public class K_Selection : MonoBehaviour
 
     public SelectionModeEnum selectionMode;
     public enum SelectionModeEnum { None, Chain, Mirror, Follow, MAX };
-    private K_NodeMap nodeMap;
+    private Node_Map nodeMap;
     private _Input input;
 
     private void Awake()
     {
-        nodeMap = GetComponent<K_NodeMap>();
+        nodeMap = GetComponent<Node_Map>();
         selectionMode = 0;
     }
 
