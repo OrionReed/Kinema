@@ -3,23 +3,22 @@ using UnityEngine;
 
 public class _Input : MonoBehaviour
 {
-    public event Action OnSelectionMode = delegate { };
-    public event Action OnForceMode = delegate { };
-    public event Action OnCameraMode = delegate { };
-    public event Action OnToggleGravity = delegate { };
-    public event Action OnRestartScene = delegate { };
-    public event Action OnLetterbox = delegate { };
-    public event Action OnTimeSpeedUp = delegate { };
-    public event Action OnTimeSpeedDown = delegate { };
+    public static event Action OnSelectionMode = delegate { };
+    public static event Action OnForceMode = delegate { };
+    public static event Action OnCameraMode = delegate { };
+    public static event Action OnToggleGravity = delegate { };
+    public static event Action OnRestartScene = delegate { };
+    public static event Action OnLetterbox = delegate { };
+    public static event Action OnTimeSpeedUp = delegate { };
+    public static event Action OnTimeSpeedDown = delegate { };
+    public static event Action OnClickLeft = delegate { };
 
-    public event Action OnClickLeft = delegate { };
-
-    public bool controlCamera { get; private set; }
-    public bool axisInput { get; private set; }
-    public bool fastCamera { get; private set; }
-    public Vector2 mouseAxis { get; private set; }
-    public Vector3 inputDirection { get; private set; }
-    public Quaternion inputRotation { get; private set; }
+    public static bool controlCamera { get; private set; }
+    public static bool axisInput { get; private set; }
+    public static bool fastCamera { get; private set; }
+    public static Vector2 mouseAxis { get; private set; }
+    public static Vector3 inputDirection { get; private set; }
+    public static Quaternion inputRotation { get; private set; }
 
     [SerializeField]
     private KeyCode SelectionMode;
@@ -52,31 +51,25 @@ public class _Input : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(SelectionMode))
-            OnSelectionMode();
-        if (Input.GetKeyDown(ForceMode))
-            OnForceMode();
-        if (Input.GetKeyDown(CameraMode))
-            OnCameraMode();
-        if (Input.GetKeyDown(ToggleGravity))
-            OnToggleGravity();
-        if (Input.GetKeyDown(RestartScene))
-            OnRestartScene();
-        if (Input.GetKeyDown(Letterbox))
-            OnLetterbox();
-        if (Input.GetKeyDown(TimeSpeedUp))
-            OnTimeSpeedUp();
-        if (Input.GetKeyDown(TimeSpeedDown))
-            OnTimeSpeedDown();
-        if (Input.GetMouseButtonDown(0))
-            OnClickLeft();
+        if (!Node_Health.dead)
+        {
+            if (Input.GetKeyDown(SelectionMode)) OnSelectionMode();
+            if (Input.GetKeyDown(ForceMode)) OnForceMode();
+            if (Input.GetKeyDown(ToggleGravity)) OnToggleGravity();
+            if (Input.GetKeyDown(Letterbox)) OnLetterbox();
+            if (inputRotation != Quaternion.identity) axisInput = true; else axisInput = false;
+        }
+        inputDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        if (Input.GetKeyDown(CameraMode)) OnCameraMode();
+        if (Input.GetKeyDown(RestartScene)) OnRestartScene();
+        if (Input.GetKeyDown(TimeSpeedUp)) OnTimeSpeedUp();
+        if (Input.GetKeyDown(TimeSpeedDown)) OnTimeSpeedDown();
+        if (Input.GetMouseButtonDown(0)) OnClickLeft();
 
         if (Input.GetMouseButton(1)) controlCamera = true; else controlCamera = false;
         if (Input.GetKey(FastCamera)) fastCamera = true; else fastCamera = false;
-        if (inputRotation != Quaternion.identity) axisInput = true; else axisInput = false;
 
         mouseAxis = new Vector2(Input.GetAxisRaw("Mouse X") / Time.timeScale, Input.GetAxisRaw("Mouse Y") / Time.timeScale);
-        inputDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
     }
 
     void FixedUpdate()

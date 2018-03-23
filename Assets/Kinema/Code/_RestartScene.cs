@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class _RestartScene : MonoBehaviour
 {
-    private _Input input;
-
+    public static event Action EventRestartScene = delegate { };
     private void Start()
     {
-        input = FindObjectOfType<_Input>();
-        input.OnRestartScene += RestartScene;
+        _Input.OnRestartScene += RestartScene;
     }
 
     private void RestartScene()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        EventRestartScene();
     }
 }

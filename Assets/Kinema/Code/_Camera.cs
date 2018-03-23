@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
-using UnityEngine.SceneManagement;
 
 /// Moves the main camera
-public class _Camera : MonoBehaviour, IInitializeOnReload
+[RequireComponent(typeof(Camera))]
+public class _Camera : MonoBehaviour
 {
     public event Action OnModeUpdate = delegate { };
     public enum CameraModeEnum { Follow, Fixed, Free, MAX }
@@ -24,21 +22,17 @@ public class _Camera : MonoBehaviour, IInitializeOnReload
     [SerializeField]
     private float followDistance = 8f;
     [SerializeField]
-    private float fixedRotateSpeed = 8f;
+    private float fixedRotateSpeed = 5f;
 
-    private _Input input;
-    private Node_Map nodeMap;
     private float rotationX = 0f;
     private float rotationY = 0f;
 
     private void Awake() { DontDestroyOnLoad(this); }
     private void Start()
     {
-        input = FindObjectOfType<_Input>();
-        input.OnCameraMode += UpdateCameraMode;
+        _Input.OnCameraMode += UpdateCameraMode;
     }
-    public void InitOnSceneLoad() { nodeMap = FindObjectOfType<Node_Map>(); }
-    private void OnDisable() { input.OnCameraMode -= UpdateCameraMode; }
+    private void OnDisable() { _Input.OnCameraMode -= UpdateCameraMode; }
 
     private void UpdateCameraMode()
     {
@@ -50,63 +44,71 @@ public class _Camera : MonoBehaviour, IInitializeOnReload
 
     private void Update()
     {
+        Vector3 target = CharacterUtils.GetCenterOfMass(CharacterSelection.currentCharacter);
         switch (cameraMode)
         {
             case CameraModeEnum.Follow:
-                if (input.controlCamera)
-                    FollowControlCamera();
+                if (_Input.controlCamera)
+                    FollowControlCamera(target);
                 else
-                    FollowAutoCamera();
+                    FollowAutoCamera(target);
                 break;
             case CameraModeEnum.Fixed:
-                FixedAutoCamera();
+                FixedAutoCamera(target);
                 break;
             case CameraModeEnum.Free:
-                if (input.controlCamera)
+                if (_Input.controlCamera)
                     FreeControlCamera();
                 break;
         }
     }
 
-    private void FollowAutoCamera()
+    private void FollowAutoCamera(Vector3 target)
     {
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
-            Quaternion.LookRotation(nodeMap.GetCenterOfMass() - transform.position),
+            Quaternion.LookRotation(target - transform.position),
             (Time.deltaTime / Time.timeScale) * followRotateSpeed);
 
         transform.position = Vector3.Slerp(
             transform.position,
-            VectorTools.PointInDirection(nodeMap.GetCenterOfMass(), transform.position, followDistance),
+            VectorTools.PointInDirection(target, transform.position, followDistance),
             (Time.deltaTime / Time.timeScale) * followMoveSpeed);
+        if (transform.position.y <= target.y)
+        {
+            transform.position = Vector3.Slerp(
+                transform.position,
+                new Vector3(transform.position.x, target.y, transform.position.z),
+                (Time.deltaTime / Time.timeScale) * followMoveSpeed);
+        }
     }
-    private void FollowControlCamera()
+    private void FollowControlCamera(Vector3 target)
     {
         // Rotate camera around player with mouse
 
-        transform.rotation = Quaternion.LookRotation(nodeMap.GetCenterOfMass() - transform.position);
+        transform.rotation = Quaternion.LookRotation(target - transform.position);
 
         transform.position = Vector3.Slerp(
             transform.position,
-            VectorTools.PointInDirection(nodeMap.GetCenterOfMass(), transform.position, followDistance),
+            VectorTools.PointInDirection(target, transform.position, followDistance),
             (Time.deltaTime / Time.timeScale) * followMoveSpeed);
     }
-    private void FixedAutoCamera()
+    private void FixedAutoCamera(Vector3 target)
     {
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
-            Quaternion.LookRotation(nodeMap.GetCenterOfMass() - transform.position),
-            (Time.deltaTime / Time.timeScale) * followRotateSpeed);
+            Quaternion.LookRotation(target - transform.position),
+            (Time.deltaTime / Time.timeScale) * fixedRotateSpeed);
     }
     private void FreeControlCamera()
     {
-        if (input.fastCamera)
-            transform.Translate(input.inputDirection * freeFastSpeed * Time.deltaTime / Time.timeScale);
+        if (_Input.fastCamera)
+            transform.Translate(_Input.inputDirection * freeFastSpeed * Time.deltaTime / Time.timeScale);
         else
-            transform.Translate(input.inputDirection * freeNormalSpeed * Time.deltaTime / Time.timeScale);
+            transform.Translate(_Input.inputDirection * freeNormalSpeed * Time.deltaTime / Time.timeScale);
         Vector3 newPosition = transform.position;
-        rotationX += input.mouseAxis.x * mouseSensitivity * Time.deltaTime;
-        rotationY += input.mouseAxis.y * mouseSensitivity * Time.deltaTime;
+        rotationX += _Input.mouseAxis.x * mouseSensitivity * Time.deltaTime;
+        rotationY += _Input.mouseAxis.y * mouseSensitivity * Time.deltaTime;
         rotationY = Mathf.Clamp(rotationY, -90, 90);
         transform.localRotation = Quaternion.AngleAxis(rotationX, Vector3.up);
         transform.localRotation *= Quaternion.AngleAxis(rotationY, Vector3.left);
