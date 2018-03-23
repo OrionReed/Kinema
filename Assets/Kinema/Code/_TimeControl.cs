@@ -13,21 +13,16 @@ public class _TimeControl : MonoBehaviour
     private int scaleIndex = 0;
     private int[] timeDivisions = { 1, 2, 4, 8, 16, 32, 64, 100, 500, 1000 };
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(this);
-    }
-
     public void Start()
     {
-        _Input.OnTimeSpeedUp += SpeedUpTime;
-        _Input.OnTimeSpeedDown += SlowDownTime;
+        _Input.OnKeyTimeSpeedUp += SpeedUpTime;
+        _Input.OnKeyTimeSpeedDown += SlowDownTime;
     }
 
     private void OnDisable()
     {
-        _Input.OnTimeSpeedUp -= SpeedUpTime;
-        _Input.OnTimeSpeedDown -= SlowDownTime;
+        _Input.OnKeyTimeSpeedUp -= SpeedUpTime;
+        _Input.OnKeyTimeSpeedDown -= SlowDownTime;
     }
     private void SlowDownTime()
     {

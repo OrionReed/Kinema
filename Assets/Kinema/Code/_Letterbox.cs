@@ -10,13 +10,13 @@ public class _Letterbox : MonoBehaviour
     private void Start()
     {
         cam = GetComponent<Camera>();
-        _Input.OnLetterbox += ToggleLetterbox;
+        _Input.OnKeyLetterbox += ToggleLetterbox;
         Node_Health.OnDeath += ToggleLetterbox;
     }
 
     private void OnDisable()
     {
-        _Input.OnLetterbox -= ToggleLetterbox;
+        _Input.OnKeyLetterbox -= ToggleLetterbox;
     }
     private void ToggleLetterbox()
     {

@@ -7,7 +7,7 @@ public class _RestartScene : MonoBehaviour
     public static event Action EventRestartScene = delegate { };
     private void Start()
     {
-        _Input.OnRestartScene += RestartScene;
+        _Input.OnKeyRestartScene += RestartScene;
     }
 
     private void RestartScene()

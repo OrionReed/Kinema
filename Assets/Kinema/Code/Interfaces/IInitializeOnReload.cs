@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
-/// 
 public interface IInitializeOnReload
 {
-    void InitOnSceneLoad();
+    void Reinitialize();
 }

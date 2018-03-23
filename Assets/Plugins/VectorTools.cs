@@ -10,10 +10,10 @@ public static class VectorTools
         return pointA + distanceInDirection;
     }
 
-    public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
+    public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion rotation)
     {
         Vector3 dir = point - pivot;
-        dir = Quaternion.Euler(angles) * dir;
+        dir = rotation * dir;
         point = dir + pivot;
         return point;
     }

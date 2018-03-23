@@ -34,13 +34,13 @@ public class Node_Movement : MonoBehaviour
     private void Start()
     {
         selection = GetComponent<Node_Selection>();
-        _Input.OnForceMode += UpdateForceMode;
+        _Input.OnKeyForceMode += UpdateForceMode;
         _RestartScene.EventRestartScene += ResetPose;
         startPose = GetPlayerPose(CharacterSelection.currentCharacter);
     }
     private void OnDisable()
     {
-        _Input.OnForceMode -= UpdateForceMode;
+        _Input.OnKeyForceMode -= UpdateForceMode;
         _RestartScene.EventRestartScene -= ResetPose;
     }
 

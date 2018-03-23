@@ -1,40 +1,29 @@
 ﻿using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine;
 
-public class _PersistentObjects : MonoBehaviour
+public class _ReinitializeObjects : MonoBehaviour
 {
-    private static _PersistentObjects Instance;
+    private static _ReinitializeObjects Instance;
 
-    [SerializeField]
-    private GameObject[] spawnObjects;
-    private IList<IInitializeOnReload> reinitializeOnLoad;
-
-    void OnEnable() { SceneManager.sceneLoaded += OnLevelFinishedLoading; }
-    void OnDisable() { SceneManager.sceneLoaded -= OnLevelFinishedLoading; }
+    private IList<IInitializeOnReload> reinitializeList;
 
     void Awake()
     {
         if (Instance)
-            DestroyImmediate(gameObject);
-        else
         {
-            DontDestroyOnLoad(this);
-            Instance = this;
-            SpawnObjects();
+            Debug.LogWarning("There can only be one instance of _ReinitializeObjects");
+            DestroyImmediate(gameObject);
         }
+        else
+            Instance = this;
     }
-    void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+    void Start()
     {
-        foreach (IInitializeOnReload init in reinitializeOnLoad)
-            init.InitOnSceneLoad();
+        reinitializeList = InterfaceFinder.FindObjects<IInitializeOnReload>();
     }
-
-    void SpawnObjects()
+    public static void Reinitialize()
     {
-        foreach (GameObject obj in spawnObjects)
-            Instantiate(obj, obj.transform.position, obj.transform.rotation);
-
-        reinitializeOnLoad = InterfaceFinder.FindObjects<IInitializeOnReload>();
+        foreach (IInitializeOnReload init in Instance.reinitializeList)
+            init.Reinitialize();
     }
 }

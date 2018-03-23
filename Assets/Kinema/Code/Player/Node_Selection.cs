@@ -24,13 +24,13 @@ public class Node_Selection : MonoBehaviour
 
     private void Start()
     {
-        _Input.OnSelectionMode += UpdateSelectionMode;
-        _Input.OnClickLeft += SelectObject;
+        _Input.OnKeySelectionMode += UpdateSelectionMode;
+        _Input.OnKeyClickLeft += SelectObject;
     }
     private void OnDisable()
     {
-        _Input.OnSelectionMode -= UpdateSelectionMode;
-        _Input.OnClickLeft -= SelectObject;
+        _Input.OnKeySelectionMode -= UpdateSelectionMode;
+        _Input.OnKeyClickLeft -= SelectObject;
     }
 
     private void UpdateSelectionMode()
