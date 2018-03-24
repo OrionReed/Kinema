@@ -12,4 +12,8 @@ public class CharacterSelection : MonoBehaviour
         currentCharacter = Character;
         currentCharacter.Init(PlayerRoot);
     }
+    private void Start()
+    {
+        _LevelState.OnPlay += delegate { currentCharacter.ResetNodeData(); };
+    }
 }

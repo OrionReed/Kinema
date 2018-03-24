@@ -22,6 +22,7 @@ public class Node_Color : MonoBehaviour
     {
         GetComponent<Node_Selection>().OnSelectionUpdate += UpdateSelectionColor;
         GetComponent<Node_Health>().OnNodeImpact += UpdateHealthColor;
+        _LevelState.OnPlay += UpdateSelectionColor;
     }
 
     private void UpdateHealthColor(CharacterNode node)

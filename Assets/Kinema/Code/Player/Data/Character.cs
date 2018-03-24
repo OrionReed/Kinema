@@ -72,10 +72,6 @@ public class Character : ScriptableObject
         LowerLegRight.Init(this, springDefault, damperDefault, maxImpact, 1, -1, rootTransform.Find("LowerLegRight"));
         FootRight.Init(this, springDefault, damperDefault, maxImpact, 1, -1, rootTransform.Find("FootRight"));
 
-        InitJoints();
-    }
-    void InitJoints()
-    {
         for (int i = 0; i < nodeList.Count; i++)
         {
             if (nodeList[i].Parent != null)
@@ -93,6 +89,14 @@ public class Character : ScriptableObject
                 root.joint.zMotion = ConfigurableJointMotion.Locked;
                 root.joint.rotationDriveMode = RotationDriveMode.Slerp;
             }
+        }
+    }
+    public void ResetNodeData()
+    {
+        for (int i = 0; i < nodeList.Count; i++)
+        {
+            nodeList[i].Data.SetDamage(0);
+            nodeList[i].Data.SetSelectionState(NodeSelectionState.None);
         }
     }
 }
