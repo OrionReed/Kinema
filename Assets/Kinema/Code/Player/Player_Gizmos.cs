@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class Node_Gizmos : MonoBehaviour
+public class Player_Gizmos : MonoBehaviour
 {
-    private Node_Selection selection;
+    private Player_NodeSelection selection;
     [SerializeField]
     private Color PivotGizmoColor = Color.blue;
     [SerializeField]
@@ -10,7 +10,7 @@ public class Node_Gizmos : MonoBehaviour
 
     private void Awake()
     {
-        selection = GetComponent<Node_Selection>();
+        selection = GetComponent<Player_NodeSelection>();
     }
 
     private void OnDrawGizmos()
@@ -21,7 +21,7 @@ public class Node_Gizmos : MonoBehaviour
 
     void DrawRuntimeGizmos()
     {
-        Gizmos.DrawSphere(CharacterUtils.GetCenterOfMass(CharacterSelection.currentCharacter), 0.1f);
+        Gizmos.DrawSphere(_CharacterUtils.GetCenterOfMass(CharacterSelection.currentCharacter), 0.1f);
         if (selection.rootFollow != null && selection.rootFollow.Parent != null)
         {
             CharacterNode root = selection.rootFollow.Data;

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Node_Color : MonoBehaviour
+public class Player_Color : MonoBehaviour
 {
     [SerializeField]
     private Color SelectionNone = Color.white;
@@ -20,8 +20,8 @@ public class Node_Color : MonoBehaviour
 
     private void Awake()
     {
-        GetComponent<Node_Selection>().OnSelectionUpdate += UpdateSelectionColor;
-        GetComponent<Node_Health>().OnNodeImpact += UpdateHealthColor;
+        GetComponent<Player_NodeSelection>().OnSelectionUpdate += UpdateSelectionColor;
+        GetComponent<Player_Health>().OnNodeImpact += UpdateHealthColor;
         _LevelState.OnPlay += UpdateSelectionColor;
     }
 
@@ -38,9 +38,9 @@ public class Node_Color : MonoBehaviour
     {
         Color selectionColor = Color.magenta;
 
-        for (int i = 0; i < CharacterSelection.currentCharacter.nodeList.Count; i++)
+        for (int i = 0; i < CharacterSelection.currentCharacter.tree.nodeList.Count; i++)
         {
-            switch (CharacterSelection.currentCharacter.nodeList[i].Data.selectionState)
+            switch (CharacterSelection.currentCharacter.tree.nodeList[i].Data.selectionState)
             {
                 case NodeSelectionState.None:
                     selectionColor = SelectionNone;
@@ -64,7 +64,7 @@ public class Node_Color : MonoBehaviour
                     selectionColor = SelectionChild;
                     break;
             }
-            IEnumerator coroutine = LerpToColor(ColorLerpTime, selectionColor, CharacterSelection.currentCharacter.nodeList[i].Data.renderer.material);
+            IEnumerator coroutine = LerpToColor(ColorLerpTime, selectionColor, CharacterSelection.currentCharacter.tree.nodeList[i].Data.renderer.material);
             StartCoroutine(coroutine);
         }
     }

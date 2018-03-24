@@ -2,7 +2,7 @@
 using UnityEngine;
 using System;
 
-public class Node_Movement : MonoBehaviour
+public class Player_Movement : MonoBehaviour
 {
     public event Action OnModeUpdate = delegate { };
     public enum ForceModeEnum { Position, Speed, Contact, MAX };
@@ -16,10 +16,10 @@ public class Node_Movement : MonoBehaviour
     private float ThrowForce;
     [SerializeField]
     private float ThrowRandomness;
-    private Node_Selection selection;
+    private Player_NodeSelection selection;
     private Quaternion rootTargetRotation = Quaternion.identity;
     private GameObject ghostLimb;
-    private CharacterPose startPose;
+    private Pose startPose;
 
     private void Awake()
     {
@@ -33,7 +33,7 @@ public class Node_Movement : MonoBehaviour
 
     private void Start()
     {
-        selection = GetComponent<Node_Selection>();
+        selection = GetComponent<Player_NodeSelection>();
         startPose = GetPlayerPose(CharacterSelection.currentCharacter);
         _LevelState.OnPlay += ResetPose;
         _Input.OnKeyForceMode += UpdateForceMode;
@@ -54,9 +54,9 @@ public class Node_Movement : MonoBehaviour
 
     private void ResetPose()
     {
-        CharacterPose thrownPose = startPose;
-        ApplyForceToPose(thrownPose, ThrowDirection, ThrowForce, ThrowRandomness);
-        ApplyPose(thrownPose);
+        Pose modifiedStartPose = startPose;
+        ApplyForceToPose(modifiedStartPose, ThrowDirection, ThrowForce, ThrowRandomness);
+        ApplyPose(modifiedStartPose, CharacterSelection.currentCharacter);
     }
     private void FixedUpdate()
     {
@@ -108,34 +108,31 @@ public class Node_Movement : MonoBehaviour
                                         ),
                                         Space.Self);
     }
-    private void ApplyPose(CharacterPose Pose)
+
+    private void ApplyPose(Pose Pose, Character character)
     {
-        foreach (NodePose pose in Pose.poses)
+        for (int i = 0; i < Pose.tree.nodeList.Count; i++)
         {
-            pose.node.Data.transform.position = pose.position;
-            pose.node.Data.transform.rotation = pose.rotation;
-            pose.node.Data.rigidbody.velocity = pose.velocity;
+            character.tree.nodeList[i].Data.transform.position = Pose.tree.nodeList[i].Data.position;
+            character.tree.nodeList[i].Data.transform.rotation = Pose.tree.nodeList[i].Data.rotation;
+            character.tree.nodeList[i].Data.rigidbody.velocity = Pose.tree.nodeList[i].Data.velocity;
         }
     }
-    private CharacterPose GetPlayerPose(Character character)
+    private Pose GetPlayerPose(Character character)
     {
-        CharacterPose currentPose = new CharacterPose();
-        foreach (TreeNode<CharacterNode> node in character.nodeList)
+        Pose currentPose = new Pose();
+        for (int i = 0; i < character.tree.nodeList.Count; i++)
         {
-            NodePose nodePose = new NodePose(
-                node,
-                node.Data.rigidbody.velocity,
-                node.Data.transform.position,
-                node.Data.transform.rotation);
-
-            currentPose.poses.Add(nodePose);
+            currentPose.tree.nodeList[i].Data.position = character.tree.nodeList[i].Data.transform.position;
+            currentPose.tree.nodeList[i].Data.rotation = character.tree.nodeList[i].Data.transform.rotation;
+            currentPose.tree.nodeList[i].Data.velocity = character.tree.nodeList[i].Data.rigidbody.velocity;
         }
         return currentPose;
     }
-    private void ApplyForceToPose(CharacterPose pose, Vector3 Direction, float Force, float Randomness)
+    private void ApplyForceToPose(Pose pose, Vector3 Direction, float Force, float Randomness)
     {
-        foreach (NodePose nodePose in pose.poses)
-            nodePose.velocity = Direction.normalized * UnityEngine.Random.Range(Force - Randomness, Force + Randomness);
+        foreach (TreeNode<PoseNode> node in pose.tree.nodeList)
+            node.Data.velocity = Direction.normalized * UnityEngine.Random.Range(Force - Randomness, Force + Randomness);
     }
 
 }

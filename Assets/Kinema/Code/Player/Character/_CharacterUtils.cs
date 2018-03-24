@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public static class CharacterUtils
+public static class _CharacterUtils
 {
     /// Center of mass in world-space.
     public static Vector3 GetCenterOfMass(Character character)
@@ -10,7 +11,7 @@ public static class CharacterUtils
         Vector3 CoM = Vector3.zero;
         float sumOfWeights = 0f;
 
-        foreach (TreeNode<CharacterNode> node in character.nodeList)
+        foreach (TreeNode<CharacterNode> node in character.tree.nodeList)
         {
             Rigidbody r = node.Data.rigidbody;
             CoM += r.worldCenterOfMass * r.mass;
@@ -26,10 +27,10 @@ public static class CharacterUtils
             return null;
         if (transform.tag == "Player")
         {
-            for (int i = 0; i < character.nodeList.Count; i++)
+            for (int i = 0; i < character.tree.nodeList.Count; i++)
             {
-                if (character.nodeList[i].Data.transform == transform)
-                    return character.nodeList[i];
+                if (character.tree.nodeList[i].Data.transform == transform)
+                    return character.tree.nodeList[i];
             }
         }
         return null;
@@ -37,7 +38,7 @@ public static class CharacterUtils
     /// Returns opposite node on X axis (left / right)
     public static TreeNode<CharacterNode> GetOpposite(TreeNode<CharacterNode> node)
     {
-        List<TreeNode<CharacterNode>> nodeList = node.Data.character.nodeList;
+        List<TreeNode<CharacterNode>> nodeList = node.Data.character.tree.nodeList;
 
         for (int i = 0; i < nodeList.Count; i++)
         {
@@ -47,16 +48,5 @@ public static class CharacterUtils
                         return nodeList[i];
         }
         return node;
-    }
-    /// Returns an array with all subsequent children of this node, excluding this node.
-    public static List<TreeNode<CharacterNode>> GetChildren(TreeNode<CharacterNode> node)
-    {
-        List<TreeNode<CharacterNode>> nodes = new List<TreeNode<CharacterNode>>();
-        foreach (var childNode in node.Children)
-        {
-            nodes.Add(childNode);
-            nodes.AddRange(GetChildren(childNode));
-        }
-        return nodes;
     }
 }

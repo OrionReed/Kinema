@@ -38,8 +38,6 @@ public class TreeNode<T>
     public TreeNode<T> Parent { get { return _parent; } }
     public List<TreeNode<T>> Children { get { return _children; } }
 
-
-
     public TreeNode<T> this[int key]
     {
         get { return _children[key]; }

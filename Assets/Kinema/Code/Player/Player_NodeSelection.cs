@@ -3,7 +3,7 @@ using UnityEngine;
 using System;
 
 /// Sets and stores selection state of player nodes
-public class Node_Selection : MonoBehaviour
+public class Player_NodeSelection : MonoBehaviour
 {
     public event Action OnSelectionUpdate = delegate { };
     public event Action OnModeUpdate = delegate { };
@@ -50,7 +50,7 @@ public class Node_Selection : MonoBehaviour
             return;
         }
         DeselectAll();
-        TreeNode<CharacterNode> oppositeNode = CharacterUtils.GetOpposite(node);
+        TreeNode<CharacterNode> oppositeNode = _CharacterUtils.GetOpposite(node);
         switch (selectionMode)
         {
             case SelectionModeEnum.None:
@@ -61,7 +61,7 @@ public class Node_Selection : MonoBehaviour
 
             case SelectionModeEnum.Chain:
                 root = node;
-                childrenChain = CharacterUtils.GetChildren(node);
+                childrenChain = _CharacterTree<CharacterNode>.GetChildren(node);
 
                 root.Data.SetSelectionState(NodeSelectionState.Root);
                 SetSelection(childrenChain, NodeSelectionState.RootChild);
@@ -70,8 +70,8 @@ public class Node_Selection : MonoBehaviour
             case SelectionModeEnum.Mirror:
                 root = node;
                 rootMirror = oppositeNode;
-                childrenChain = CharacterUtils.GetChildren(node);
-                childrenMirror = CharacterUtils.GetChildren(rootMirror);
+                childrenChain = _CharacterTree<CharacterNode>.GetChildren(node);
+                childrenMirror = _CharacterTree<CharacterNode>.GetChildren(rootMirror);
 
                 root.Data.SetSelectionState(NodeSelectionState.Root);
                 SetSelection(childrenChain, NodeSelectionState.RootChild);
@@ -82,8 +82,8 @@ public class Node_Selection : MonoBehaviour
             case SelectionModeEnum.Follow:
                 root = node;
                 rootFollow = oppositeNode;
-                childrenChain = CharacterUtils.GetChildren(node);
-                childrenFollow = CharacterUtils.GetChildren(rootMirror);
+                childrenChain = _CharacterTree<CharacterNode>.GetChildren(node);
+                childrenFollow = _CharacterTree<CharacterNode>.GetChildren(rootMirror);
 
                 root.Data.SetSelectionState(NodeSelectionState.Root);
                 SetSelection(childrenChain, NodeSelectionState.RootChild);
@@ -98,7 +98,7 @@ public class Node_Selection : MonoBehaviour
     {
         RaycastHit hit = new RaycastHit();
         Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit);
-        TreeNode<CharacterNode> node = CharacterUtils.GetFromTransform(CharacterSelection.currentCharacter, hit.transform);
+        TreeNode<CharacterNode> node = _CharacterUtils.GetFromTransform(CharacterSelection.currentCharacter, hit.transform);
         if (node != null)
         {
             UpdateSelection(node);
@@ -113,7 +113,7 @@ public class Node_Selection : MonoBehaviour
         childrenChain = null;
         childrenMirror = null;
         childrenFollow = null;
-        SetSelection(CharacterSelection.currentCharacter.nodeList, NodeSelectionState.None);
+        SetSelection(CharacterSelection.currentCharacter.tree.nodeList, NodeSelectionState.None);
         OnSelectionUpdate();
     }
 

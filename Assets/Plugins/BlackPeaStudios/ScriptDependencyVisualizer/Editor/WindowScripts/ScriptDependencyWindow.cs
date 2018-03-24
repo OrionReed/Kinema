@@ -47,7 +47,6 @@ namespace BPS
 
 			Serializer.Init (window.GetSavePath ());
 			window.InitScriptData ();
-			window.antiAlias = 4;
 			window.minSize = new Vector2 (600, 450);
 			window.weaveStartTime = Time.realtimeSinceStartup;
 			skin = Resources.Load ("GUISKin")as GUISkin;

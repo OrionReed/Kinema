@@ -2,7 +2,7 @@
 
 public class NodeHealth_CollisionDetection : MonoBehaviour
 {
-    public Node_Health health;
+    public Player_Health health;
 
     private void OnCollisionEnter(Collision other)
     {

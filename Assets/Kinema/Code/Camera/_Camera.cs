@@ -33,7 +33,7 @@ public class _Camera : MonoBehaviour
 
     private void Update()
     {
-        Vector3 target = CharacterUtils.GetCenterOfMass(CharacterSelection.currentCharacter);
+        Vector3 target = _CharacterUtils.GetCenterOfMass(CharacterSelection.currentCharacter);
         switch (cameraMode)
         {
             case CameraModeEnum.Follow:
