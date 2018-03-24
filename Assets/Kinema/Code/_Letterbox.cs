@@ -11,7 +11,8 @@ public class _Letterbox : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         _Input.OnKeyLetterbox += ToggleLetterbox;
-        Node_Health.OnDeath += ToggleLetterbox;
+        _LevelState.OnPlay += delegate { ShowLetterbox(false); };
+        _LevelState.OnDead += delegate { ShowLetterbox(true); };
     }
 
     private void OnDisable()
@@ -20,19 +21,11 @@ public class _Letterbox : MonoBehaviour
     }
     private void ToggleLetterbox()
     {
-        if (!Node_Health.dead)
-            ShowLetterbox(false, true);
-        else
-            ShowLetterbox(true);
-    }
-
-    private void ShowLetterbox(bool showLetterbox, bool toggle = false)
-    {
-        float screenAspect = (float)Screen.width / (float)Screen.height;
-        float aspectHeight = screenAspect / letterboxAspect;
-        Rect rect = cam.rect;
-        if (toggle)
+        if (_LevelState.currentState != _LevelState.States.Dead)
         {
+            float screenAspect = (float)Screen.width / (float)Screen.height;
+            float aspectHeight = screenAspect / letterboxAspect;
+            Rect rect = cam.rect;
             bool isLetterboxed = (cam.rect.height == aspectHeight);
             rect.width = 1.0f;
             rect.x = 0;
@@ -40,14 +33,18 @@ public class _Letterbox : MonoBehaviour
             rect.y = (1 - (isLetterboxed ? (float)Screen.height : aspectHeight)) / 2;
             cam.rect = rect;
         }
-        else
-        {
-            rect.width = 1.0f;
-            rect.x = 0;
-            rect.height = showLetterbox ? (float)Screen.height : aspectHeight;
-            rect.y = (1 - (showLetterbox ? (float)Screen.height : aspectHeight)) / 2;
-            cam.rect = rect;
-        }
+    }
 
+    private void ShowLetterbox(bool showLetterbox)
+    {
+        float screenAspect = (float)Screen.width / (float)Screen.height;
+        float aspectHeight = screenAspect / letterboxAspect;
+        Rect rect = cam.rect;
+
+        rect.width = 1.0f;
+        rect.x = 0;
+        rect.height = showLetterbox ? aspectHeight : (float)Screen.height;
+        rect.y = (1 - (showLetterbox ? aspectHeight : (float)Screen.height)) / 2;
+        cam.rect = rect;
     }
 }

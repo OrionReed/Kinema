@@ -34,14 +34,14 @@ public class Node_Movement : MonoBehaviour
     private void Start()
     {
         selection = GetComponent<Node_Selection>();
-        _Input.OnKeyForceMode += UpdateForceMode;
-        _RestartScene.EventRestartScene += ResetPose;
         startPose = GetPlayerPose(CharacterSelection.currentCharacter);
+        _LevelState.OnPlay += ResetPose;
+        _Input.OnKeyForceMode += UpdateForceMode;
     }
     private void OnDisable()
     {
         _Input.OnKeyForceMode -= UpdateForceMode;
-        _RestartScene.EventRestartScene -= ResetPose;
+        _LevelState.OnPlay -= ResetPose;
     }
 
     private void UpdateForceMode()
@@ -135,7 +135,7 @@ public class Node_Movement : MonoBehaviour
     private void ApplyForceToPose(CharacterPose pose, Vector3 Direction, float Force, float Randomness)
     {
         foreach (NodePose nodePose in pose.poses)
-            nodePose.velocity = Direction.normalized * UnityEngine.Random.RandomRange(Force - Randomness, Force + Randomness);
+            nodePose.velocity = Direction.normalized * UnityEngine.Random.Range(Force - Randomness, Force + Randomness);
     }
 
 }

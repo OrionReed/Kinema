@@ -51,7 +51,7 @@ public class _Input : MonoBehaviour
 
     private void Update()
     {
-        if (!Node_Health.dead)
+        if (_LevelState.currentState != _LevelState.States.Dead)
         {
             if (Input.GetKeyDown(SelectionMode)) OnKeySelectionMode();
             if (Input.GetKeyDown(ForceMode)) OnKeyForceMode();
