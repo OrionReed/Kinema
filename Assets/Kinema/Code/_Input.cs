@@ -11,7 +11,8 @@ public class _Input : MonoBehaviour
     public static event Action OnKeyLetterbox = delegate { };
     public static event Action OnKeyTimeSpeedUp = delegate { };
     public static event Action OnKeyTimeSpeedDown = delegate { };
-    public static event Action OnKeyClickLeft = delegate { };
+    public static event Action OnClickLeft = delegate { };
+    public static event Action OnKeyThrow = delegate { };
 
     public static bool controlCamera { get; private set; }
     public static bool axisInput { get; private set; }
@@ -39,6 +40,8 @@ public class _Input : MonoBehaviour
     private KeyCode TimeSpeedUp;
     [SerializeField]
     private KeyCode TimeSpeedDown;
+    [SerializeField]
+    private KeyCode Throw;
 
     private void Awake()
     {
@@ -65,7 +68,8 @@ public class _Input : MonoBehaviour
         if (Input.GetKeyDown(RestartScene)) OnKeyRestartScene();
         if (Input.GetKeyDown(TimeSpeedUp)) OnKeyTimeSpeedUp();
         if (Input.GetKeyDown(TimeSpeedDown)) OnKeyTimeSpeedDown();
-        if (Input.GetMouseButtonDown(0)) OnKeyClickLeft();
+        if (Input.GetKeyDown(Throw)) OnKeyThrow();
+        if (Input.GetMouseButtonDown(0)) OnClickLeft();
 
         if (Input.GetMouseButton(1)) controlCamera = true; else controlCamera = false;
         if (Input.GetKey(FastCamera)) fastCamera = true; else fastCamera = false;

@@ -25,20 +25,17 @@ public class Player_NodeSelection : MonoBehaviour
     private void Start()
     {
         _Input.OnKeySelectionMode += UpdateSelectionMode;
-        _Input.OnKeyClickLeft += SelectObject;
+        _Input.OnClickLeft += SelectObject;
     }
     private void OnDisable()
     {
         _Input.OnKeySelectionMode -= UpdateSelectionMode;
-        _Input.OnKeyClickLeft -= SelectObject;
+        _Input.OnClickLeft -= SelectObject;
     }
 
     private void UpdateSelectionMode()
     {
-        selectionMode += 1;
-        if (selectionMode == SelectionModeEnum.MAX)
-            selectionMode = 0;
-        OnModeUpdate();
+        selectionMode += 1; if (selectionMode == SelectionModeEnum.MAX) selectionMode = 0; OnModeUpdate();
     }
 
     private void UpdateSelection(TreeNode<CharacterNode> node)
@@ -50,7 +47,7 @@ public class Player_NodeSelection : MonoBehaviour
             return;
         }
         DeselectAll();
-        TreeNode<CharacterNode> oppositeNode = _CharacterUtils.GetOpposite(node);
+        TreeNode<CharacterNode> oppositeNode = Utilities_Character.GetOpposite(node);
         switch (selectionMode)
         {
             case SelectionModeEnum.None:
@@ -98,7 +95,7 @@ public class Player_NodeSelection : MonoBehaviour
     {
         RaycastHit hit = new RaycastHit();
         Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit);
-        TreeNode<CharacterNode> node = _CharacterUtils.GetFromTransform(CharacterSelection.currentCharacter, hit.transform);
+        TreeNode<CharacterNode> node = Utilities_Character.GetFromTransform(Player_Installer.currentCharacter, hit.transform);
         if (node != null)
         {
             UpdateSelection(node);
@@ -113,7 +110,7 @@ public class Player_NodeSelection : MonoBehaviour
         childrenChain = null;
         childrenMirror = null;
         childrenFollow = null;
-        SetSelection(CharacterSelection.currentCharacter.tree.nodeList, NodeSelectionState.None);
+        SetSelection(Player_Installer.currentCharacter.tree.nodeList, NodeSelectionState.None);
         OnSelectionUpdate();
     }
 

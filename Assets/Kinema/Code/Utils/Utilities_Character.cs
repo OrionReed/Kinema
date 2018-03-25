@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public static class _CharacterUtils
+public static class Utilities_Character
 {
     /// Center of mass in world-space.
     public static Vector3 GetCenterOfMass(Character character)

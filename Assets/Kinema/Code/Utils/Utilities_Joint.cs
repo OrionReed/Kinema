@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public static class QuaternionUtils
+public static class Utilities_Joint
 {
     /// <summary>
     /// Sets a joint's targetRotation to match a given local rotation.

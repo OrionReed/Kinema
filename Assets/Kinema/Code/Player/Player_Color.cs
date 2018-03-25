@@ -21,7 +21,7 @@ public class Player_Color : MonoBehaviour
     private void Awake()
     {
         GetComponent<Player_NodeSelection>().OnSelectionUpdate += UpdateSelectionColor;
-        GetComponent<Player_Health>().OnNodeImpact += UpdateHealthColor;
+        GetComponent<Player_Health>().OnNodeDamaged += UpdateHealthColor;
         _LevelState.OnPlay += UpdateSelectionColor;
     }
 
@@ -38,9 +38,9 @@ public class Player_Color : MonoBehaviour
     {
         Color selectionColor = Color.magenta;
 
-        for (int i = 0; i < CharacterSelection.currentCharacter.tree.nodeList.Count; i++)
+        for (int i = 0; i < Player_Installer.currentCharacter.tree.nodeList.Count; i++)
         {
-            switch (CharacterSelection.currentCharacter.tree.nodeList[i].Data.selectionState)
+            switch (Player_Installer.currentCharacter.tree.nodeList[i].Data.selectionState)
             {
                 case NodeSelectionState.None:
                     selectionColor = SelectionNone;
@@ -64,7 +64,7 @@ public class Player_Color : MonoBehaviour
                     selectionColor = SelectionChild;
                     break;
             }
-            IEnumerator coroutine = LerpToColor(ColorLerpTime, selectionColor, CharacterSelection.currentCharacter.tree.nodeList[i].Data.renderer.material);
+            IEnumerator coroutine = LerpToColor(ColorLerpTime, selectionColor, Player_Installer.currentCharacter.tree.nodeList[i].Data.renderer.material);
             StartCoroutine(coroutine);
         }
     }

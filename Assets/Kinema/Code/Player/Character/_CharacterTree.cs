@@ -40,7 +40,6 @@ public class _CharacterTree<T> where T : new()
 
     public _CharacterTree()
     {
-        Debug.Log("T exists?" + (Head != null));
         root = new TreeNode<T>(Stomach);
         root.AddChild(UpperLegLeft).AddChild(LowerLegLeft).AddChild(FootLeft);
         root.AddChild(UpperLegRight).AddChild(LowerLegRight).AddChild(FootRight);

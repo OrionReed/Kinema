@@ -11,5 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c2551c475fe425093ca0d699e7618f, type: 3}
   m_Name: Test Character
   m_EditorClassIdentifier: 
-  StartPose: {fileID: 0}
-  RootTransform: {fileID: 0}
+  springDefault: 0
+  damperDefault: 2
+  maxImpact: 20

@@ -7,7 +7,7 @@ using System;
 [Serializable]
 public class Character : ScriptableObject
 {
-    public _CharacterTree<CharacterNode> tree { get; private set; }
+    public _CharacterTree<CharacterNode> tree { get; private set; } = new _CharacterTree<CharacterNode>();
 
     [SerializeField]
     private float springDefault = 30;
@@ -16,14 +16,8 @@ public class Character : ScriptableObject
     [SerializeField]
     private float maxImpact = 20;
 
-    Character()
-    {
-        tree = new _CharacterTree<CharacterNode>();
-    }
-
     public void Init(Transform RootTransform)
     {
-        Debug.Log("Tree?" + (tree != null));
         tree.Head.Init(this, springDefault, damperDefault, maxImpact, 0, 1, RootTransform.Find(tree.StringHead));
         tree.Chest.Init(this, springDefault, damperDefault, maxImpact, 0, 1, RootTransform.Find(tree.StringChest));
         tree.Stomach.Init(this, springDefault, damperDefault, maxImpact, 0, 0, RootTransform.Find(tree.StringStomach));
@@ -70,5 +64,13 @@ public class Character : ScriptableObject
             tree.nodeList[i].Data.SetDamage(0);
             tree.nodeList[i].Data.SetSelectionState(NodeSelectionState.None);
         }
+    }
+    public CharacterNode GetNode(int index)
+    {
+        return tree.nodeList[index].Data;
+    }
+    public TreeNode<CharacterNode> GetTreeNode(int index)
+    {
+        return tree.nodeList[index];
     }
 }

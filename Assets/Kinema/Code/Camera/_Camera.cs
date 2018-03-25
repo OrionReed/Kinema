@@ -25,15 +25,12 @@ public class _Camera : MonoBehaviour
 
     private void UpdateCameraMode()
     {
-        cameraMode += 1;
-        if (cameraMode == CameraModeEnum.MAX)
-            cameraMode = 0;
-        OnModeUpdate();
+        cameraMode += 1; if (cameraMode == CameraModeEnum.MAX) cameraMode = 0; OnModeUpdate();
     }
 
     private void Update()
     {
-        Vector3 target = _CharacterUtils.GetCenterOfMass(CharacterSelection.currentCharacter);
+        Vector3 target = Utilities_Character.GetCenterOfMass(Player_Installer.currentCharacter);
         switch (cameraMode)
         {
             case CameraModeEnum.Follow:

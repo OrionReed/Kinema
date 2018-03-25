@@ -45,16 +45,11 @@ public class _LevelState : MonoBehaviour
 
     // STATES
 
-    private void Init_Enter() { Debug.Log("Initializing State Machine"); }
+    private void Init_Enter() { }
     private IEnumerator Intro_Enter()
     {
-
-        Debug.Log("Starting in 2");
-        yield return new WaitForSeconds(1);
-
-        Debug.Log("Starting in 1");
-        yield return new WaitForSeconds(1);
-
+        Debug.Log("Starting...");
+        yield return new WaitForSeconds(0);
         StatePlay();
     }
     private void Play_Enter()

@@ -60,3 +60,4 @@ MonoBehaviour:
   FastCamera: 304
   TimeSpeedUp: 50
   TimeSpeedDown: 49
+  Throw: 32
