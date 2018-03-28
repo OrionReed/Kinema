@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMode_AutoFollow : ICameraMode
+[CreateAssetMenu(menuName = "Kinema/Auto-Follow Camera")]
+public class CameraMode_AutoFollow : ScriptableObject, ICameraMode
 {
     [SerializeField]
     private float orbitSpeed = 50;

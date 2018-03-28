@@ -64,4 +64,18 @@ public class _CharacterTree<T> where T : new()
         }
         return nodes;
     }
+    /// Returns opposite node on X axis (left / right)
+    public TreeNode<CharacterNode> GetOpposite(TreeNode<CharacterNode> node)
+    {
+        List<TreeNode<CharacterNode>> nodeList = node.Data.character.tree.nodeList;
+
+        for (int i = 0; i < nodeList.Count; i++)
+        {
+            if (nodeList[i].Data.coordX == -node.Data.coordX)
+                if (nodeList[i].Data.coordY == node.Data.coordY)
+                    if (nodeList[i].Level == node.Level)
+                        return nodeList[i];
+        }
+        return node;
+    }
 }

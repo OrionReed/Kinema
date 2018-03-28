@@ -25,13 +25,13 @@ public class _LevelState : MonoBehaviour
 
     private StateMachine<States> stateMachine;
 
-    // Handy Methods to change state, call events and log change at once.
-    private void StateIntro() { stateMachine.ChangeState(States.Intro); OnIntro(); Debug.Log("State: Intro"); }
-    private void StatePlay() { stateMachine.ChangeState(States.Play); OnPlay(); Debug.Log("State: Play"); }
-    private void StateWin() { stateMachine.ChangeState(States.Win); OnWin(); Debug.Log("State: Win"); }
-    private void StateLose() { stateMachine.ChangeState(States.Lose); OnLose(); Debug.Log("State: Lose"); }
-    private void StateDead() { stateMachine.ChangeState(States.Dead); OnDead(); Debug.Log("State: Dead"); }
-    private void StateWatchReplay() { stateMachine.ChangeState(States.WatchReplay); OnWatchReplay(); Debug.Log("State: WatchReplay"); }
+    // Handy Methods to change state & call events at once.
+    private void StateIntro() { stateMachine.ChangeState(States.Intro); OnIntro(); }
+    private void StatePlay() { stateMachine.ChangeState(States.Play); OnPlay(); }
+    private void StateWin() { stateMachine.ChangeState(States.Win); OnWin(); }
+    private void StateLose() { stateMachine.ChangeState(States.Lose); OnLose(); }
+    private void StateDead() { stateMachine.ChangeState(States.Dead); OnDead(); }
+    private void StateWatchReplay() { stateMachine.ChangeState(States.WatchReplay); OnWatchReplay(); }
 
     private void Awake() { stateMachine = StateMachine<States>.Initialize(this, States.Init); }
     private void Start()

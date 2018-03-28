@@ -1,25 +1,29 @@
 ﻿using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Player_Color : MonoBehaviour
 {
     [SerializeField]
-    private Color SelectionNone = Color.white;
+    private Color ColorNone = Color.white;
     [SerializeField]
-    private Color SelectionRoot = Color.white;
+    private Color ColorRoot = Color.white;
     [SerializeField]
-    private Color SelectionChild = Color.white;
+    private Color ColorChild = Color.white;
     [SerializeField]
-    private Color SelectionFollowRoot = Color.white;
+    private Color ColorRootFollow = Color.white;
     [SerializeField]
-    private Color SelectionFollowChild = Color.white;
+    private Color ColorChildFollow = Color.white;
     [SerializeField]
     private float ColorLerpTime = 0.1f;
     [SerializeField]
     private Color Hurt = Color.red;
 
+    private Player_NodeSelection selection;
+
     private void Awake()
     {
+        selection = FindObjectOfType<Player_NodeSelection>();
         GetComponent<Player_NodeSelection>().OnSelectionUpdate += UpdateSelectionColor;
         GetComponent<Player_Health>().OnNodeDamaged += UpdateHealthColor;
         _LevelState.OnPlay += UpdateSelectionColor;
@@ -29,7 +33,7 @@ public class Player_Color : MonoBehaviour
     {
         IEnumerator coroutine = LerpToColor(
             ColorLerpTime,
-            Color.Lerp(SelectionNone, Hurt, node.damage),
+            Color.Lerp(ColorNone, Hurt, node.damage),
             node.renderer.material);
         StartCoroutine(coroutine);
     }
@@ -37,34 +41,38 @@ public class Player_Color : MonoBehaviour
     private void UpdateSelectionColor()
     {
         Color selectionColor = Color.magenta;
-
-        for (int i = 0; i < Player_Installer.currentCharacter.tree.nodeList.Count; i++)
+        for (int i = 0; i < selection.nodeList.Count; i++)
         {
-            switch (Player_Installer.currentCharacter.tree.nodeList[i].Data.selectionState)
+            if (selection.nodeList[i].Data.selected == false)
             {
-                case NodeSelectionState.None:
-                    selectionColor = SelectionNone;
-                    break;
-                case NodeSelectionState.Root:
-                    selectionColor = SelectionRoot;
-                    break;
-                case NodeSelectionState.RootChild:
-                    selectionColor = SelectionChild;
-                    break;
-                case NodeSelectionState.FollowRoot:
-                    selectionColor = SelectionFollowRoot;
-                    break;
-                case NodeSelectionState.FollowChild:
-                    selectionColor = SelectionFollowChild;
-                    break;
-                case NodeSelectionState.MirrorRoot:
-                    selectionColor = SelectionRoot;
-                    break;
-                case NodeSelectionState.MirrorChild:
-                    selectionColor = SelectionChild;
-                    break;
+                selectionColor = ColorNone;
+                IEnumerator coroutine = LerpToColor(ColorLerpTime, selectionColor, selection.nodeList[i].Data.renderer.material);
+                StartCoroutine(coroutine);
             }
-            IEnumerator coroutine = LerpToColor(ColorLerpTime, selectionColor, Player_Installer.currentCharacter.tree.nodeList[i].Data.renderer.material);
+        }
+
+        for (int i = 0; i < selection.chain.Count; i++)
+        {
+            IEnumerator coroutine = LerpToColor(
+                ColorLerpTime,
+                selectionColor = i == 0 ? ColorRoot : ColorChild,
+                selection.chain[i].Data.renderer.material);
+            StartCoroutine(coroutine);
+        }
+        for (int i = 0; i < selection.chainFollow.Count; i++)
+        {
+            IEnumerator coroutine = LerpToColor(
+                ColorLerpTime,
+                selectionColor = i == 0 ? ColorRootFollow : ColorChildFollow,
+                selection.chainFollow[i].Data.renderer.material);
+            StartCoroutine(coroutine);
+        }
+        for (int i = 0; i < selection.chainMirror.Count; i++)
+        {
+            IEnumerator coroutine = LerpToColor(
+                ColorLerpTime,
+                selectionColor = i == 0 ? ColorRoot : ColorChild,
+                selection.chainMirror[i].Data.renderer.material);
             StartCoroutine(coroutine);
         }
     }

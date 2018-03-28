@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMode_Fixed : ICameraMode
+[CreateAssetMenu(menuName = "Kinema/Fixed Camera")]
+public class CameraMode_Fixed : ScriptableObject, ICameraMode
 {
     [SerializeField]
     private float rotateSpeed = 5f;

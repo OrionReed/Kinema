@@ -10,17 +10,19 @@ public class _Camera : MonoBehaviour
     public CameraModeEnum cameraMode { get; private set; }
     public float mouseSensitivity { get; private set; } = 180f;
 
+    [SerializeField]
     private CameraMode_AutoFollow modeFollow;
+    [SerializeField]
     private CameraMode_Fixed modeFixed;
+    [SerializeField]
     private CameraMode_Free modeFree;
+    private Character character;
 
-    private void Awake()
+    private void Start()
     {
-        modeFollow = new CameraMode_AutoFollow();
-        modeFixed = new CameraMode_Fixed();
-        modeFree = new CameraMode_Free();
+        _Input.OnKeyCameraMode += UpdateCameraMode;
+        character = FindObjectOfType<Character_Installer>().currentCharacter;
     }
-    private void Start() { _Input.OnKeyCameraMode += UpdateCameraMode; }
     private void OnDisable() { _Input.OnKeyCameraMode -= UpdateCameraMode; }
 
     private void UpdateCameraMode()
@@ -30,7 +32,7 @@ public class _Camera : MonoBehaviour
 
     private void Update()
     {
-        Vector3 target = Utilities_Character.GetCenterOfMass(Player_Installer.currentCharacter);
+        Vector3 target = character.GetCenterOfMass();
         switch (cameraMode)
         {
             case CameraModeEnum.Follow:

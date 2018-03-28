@@ -57,20 +57,50 @@ public class Character : ScriptableObject
             }
         }
     }
-    public void ResetNodeData()
+
+    // UTILITIES //
+
+    /// Center of mass in world-space.
+    public Vector3 GetCenterOfMass()
+    {
+        Vector3 CoM = Vector3.zero;
+        float sumOfWeights = 0f;
+
+        foreach (TreeNode<CharacterNode> node in tree.nodeList)
+        {
+            Rigidbody r = node.Data.rigidbody;
+            CoM += r.worldCenterOfMass * r.mass;
+            sumOfWeights += r.mass;
+        }
+        CoM /= sumOfWeights;
+        return CoM;
+    }
+    /// Returns node in character this transform belongs to.
+    public TreeNode<CharacterNode> ContainsTransform(Transform transform)
     {
         for (int i = 0; i < tree.nodeList.Count; i++)
         {
-            tree.nodeList[i].Data.SetDamage(0);
-            tree.nodeList[i].Data.SetSelectionState(NodeSelectionState.None);
+            if (tree.nodeList[i].Data.transform == transform)
+                return tree.nodeList[i];
         }
+        return null;
     }
-    public CharacterNode GetNode(int index)
+
+
+    /// Applies a world-space keyframe to this character.
+    public void SetKeyframe(Keyframe keyframe)
     {
-        return tree.nodeList[index].Data;
+        for (int i = 0; i < keyframe.tree.nodeList.Count; i++)
+            tree.nodeList[i].Data.SetNodeKeyframe(keyframe.tree.nodeList[i].Data.GetNodeKeyframe());
     }
-    public TreeNode<CharacterNode> GetTreeNode(int index)
+
+    /// Gets the current world-space keyframe of this character.
+    public Keyframe GetKeyframe()
     {
-        return tree.nodeList[index];
+        Keyframe currentKeyframe = new Keyframe();
+        for (int i = 0; i < tree.nodeList.Count; i++)
+            currentKeyframe.tree.nodeList[i].Data.SetNodeKeyframe(tree.nodeList[i].Data.GetNodeKeyframe());
+
+        return currentKeyframe;
     }
 }

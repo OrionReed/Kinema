@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-public class CharacterNode
+public class CharacterNode : IKeyframeNode
 {
     public Character character { get; private set; }
     public float spring { get; private set; }
@@ -15,10 +15,9 @@ public class CharacterNode
     public Renderer renderer { get; private set; }
     public ConfigurableJoint joint { get; private set; }
     public float damage { get; private set; } = 0;
-    public NodeSelectionState selectionState { get; private set; } = NodeSelectionState.None;
+    public bool selected = false;
 
     public void SetDamage(float Damage) { damage = Damage; }
-    public void SetSelectionState(NodeSelectionState state) { selectionState = state; }
 
     public void Init(Character Character, float Spring, float Damper, float MaxImpactForce, int CoordX, int CoordY, Transform Transform)
     {
@@ -34,5 +33,18 @@ public class CharacterNode
         renderer = transform.GetComponent<Renderer>();
         if (transform.GetComponent<ConfigurableJoint>() != null)
             joint = transform.GetComponent<ConfigurableJoint>();
+    }
+
+    public KeyframeNode GetNodeKeyframe()
+    {
+        KeyframeNode keyframeNode = new KeyframeNode(Vector3.zero, transform.position, transform.rotation);
+        return keyframeNode;
+    }
+
+    public void SetNodeKeyframe(KeyframeNode keyframeNode)
+    {
+        transform.position = keyframeNode.position;
+        transform.rotation = keyframeNode.rotation;
+        rigidbody.velocity = keyframeNode.velocity;
     }
 }

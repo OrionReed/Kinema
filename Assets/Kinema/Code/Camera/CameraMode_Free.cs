@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMode_Free : ICameraMode
+[CreateAssetMenu(menuName = "Kinema/Free Camera")]
+public class CameraMode_Free : ScriptableObject, ICameraMode
 {
     [SerializeField]
     private float freeNormalSpeed = 5.0f;

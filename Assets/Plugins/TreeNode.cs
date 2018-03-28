@@ -1,17 +1,8 @@
-﻿/**
- * TreeNode.cs
- * Author: Luke Holland (http://lukeholland.me/)
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 public class TreeNode<T>
 {
-
-    public delegate bool TraversalDataDelegate(T data);
-    public delegate bool TraversalNodeDelegate(TreeNode<T> node);
-
     private readonly T _data;
     private readonly TreeNode<T> _parent;
     private readonly int _level;
@@ -69,7 +60,6 @@ public class TreeNode<T>
             TreeNode<T> child = _children[i];
             if (child.Data.Equals(data)) return child;
         }
-
         return null;
     }
 
@@ -77,23 +67,4 @@ public class TreeNode<T>
     {
         return _children.Remove(node);
     }
-
-    public void Traverse(TraversalDataDelegate handler)
-    {
-        if (handler(_data))
-        {
-            int i = 0, l = Count;
-            for (; i < l; ++i) _children[i].Traverse(handler);
-        }
-    }
-
-    public void Traverse(TraversalNodeDelegate handler)
-    {
-        if (handler(this))
-        {
-            int i = 0, l = Count;
-            for (; i < l; ++i) _children[i].Traverse(handler);
-        }
-    }
-
 }

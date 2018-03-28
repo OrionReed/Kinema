@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
-public class Ghost
+public class TargetCharacter
 {
-    public _CharacterTree<GhostNode> tree { get; private set; } = new _CharacterTree<GhostNode>();
+    public _CharacterTree<TargetNode> tree { get; private set; } = new _CharacterTree<TargetNode>();
+    public List<TreeNode<TargetNode>> nodeList { get; private set; } = new List<TreeNode<TargetNode>>();
     public void Init(Transform RootTransform)
     {
         tree.Head.Init(RootTransform.Find(tree.StringHead), RootTransform.Find(tree.StringHead).GetComponent<Renderer>());
@@ -24,13 +26,24 @@ public class Ghost
         tree.UpperLegRight.Init(RootTransform.Find(tree.StringUpperLegRight), RootTransform.Find(tree.StringUpperLegRight).GetComponent<Renderer>());
         tree.LowerLegRight.Init(RootTransform.Find(tree.StringLowerLegRight), RootTransform.Find(tree.StringLowerLegRight).GetComponent<Renderer>());
         tree.FootRight.Init(RootTransform.Find(tree.StringFootRight), RootTransform.Find(tree.StringFootRight).GetComponent<Renderer>());
+
+        nodeList = tree.nodeList;
     }
-    public GhostNode GetNode(int index)
+
+    /// Applies a world-space keyframe to this character.
+    public void SetKeyframe(Keyframe keyframe)
     {
-        return tree.nodeList[index].Data;
+        for (int i = 0; i < keyframe.tree.nodeList.Count; i++)
+            tree.nodeList[i].Data.SetNodeKeyframe(keyframe.tree.nodeList[i].Data.GetNodeKeyframe());
     }
-    public TreeNode<GhostNode> GetTreeNode(int index)
+
+    /// Gets the current world-space keyframe of this character.
+    public Keyframe GetKeyframe()
     {
-        return tree.nodeList[index];
+        Keyframe currentKeyframe = new Keyframe();
+        for (int i = 0; i < tree.nodeList.Count; i++)
+            currentKeyframe.tree.nodeList[i].Data.SetNodeKeyframe(tree.nodeList[i].Data.GetNodeKeyframe());
+
+        return currentKeyframe;
     }
 }
