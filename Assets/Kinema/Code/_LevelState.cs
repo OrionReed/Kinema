@@ -11,7 +11,7 @@ public class _LevelState : MonoBehaviour
     public static event Action OnLose = delegate { };
     public static event Action OnDead = delegate { };
     public static event Action OnWatchReplay = delegate { };
-    public static States currentState { get; private set; }
+    public static States CurrentState { get; private set; }
     public enum States
     {
         Init,
@@ -36,12 +36,12 @@ public class _LevelState : MonoBehaviour
     private void Awake() { stateMachine = StateMachine<States>.Initialize(this, States.Init); }
     private void Start()
     {
-        _Input.OnKeyRestartScene += StatePlay;
+        _Input.OnKeyResetScene += StatePlay;
         FindObjectOfType<Player_Health>().OnPlayerDeath += StateDead;
 
         StateIntro();
     }
-    private void Update() { currentState = stateMachine.State; }
+    private void Update() { CurrentState = stateMachine.State; }
 
     // STATES
 

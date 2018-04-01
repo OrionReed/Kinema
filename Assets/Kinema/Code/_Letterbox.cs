@@ -11,8 +11,8 @@ public class _Letterbox : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         _Input.OnKeyLetterbox += ToggleLetterbox;
-        _LevelState.OnPlay += delegate { ShowLetterbox(false); };
-        _LevelState.OnDead += delegate { ShowLetterbox(true); };
+        //_LevelState.OnPlay += delegate { ShowLetterbox(false); };
+        //_LevelState.OnDead += delegate { ShowLetterbox(true); };
     }
 
     private void OnDisable()
@@ -21,7 +21,7 @@ public class _Letterbox : MonoBehaviour
     }
     private void ToggleLetterbox()
     {
-        if (_LevelState.currentState != _LevelState.States.Dead)
+        if (_LevelState.CurrentState != _LevelState.States.Dead)
         {
             float screenAspect = (float)Screen.width / (float)Screen.height;
             float aspectHeight = screenAspect / letterboxAspect;

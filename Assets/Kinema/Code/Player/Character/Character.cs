@@ -7,7 +7,8 @@ using System;
 [Serializable]
 public class Character : ScriptableObject
 {
-    public _CharacterTree<CharacterNode> tree { get; private set; } = new _CharacterTree<CharacterNode>();
+    public _CharacterTree<CharacterNode> Tree { get; private set; } = new _CharacterTree<CharacterNode>();
+    public List<TreeNode<CharacterNode>> List { get; private set; } = new List<TreeNode<CharacterNode>>();
 
     [SerializeField]
     private float springDefault = 30;
@@ -16,46 +17,48 @@ public class Character : ScriptableObject
     [SerializeField]
     private float maxImpact = 20;
 
-    public void Init(Transform RootTransform)
+    public void Init(Transform rootTransform)
     {
-        tree.Head.Init(this, springDefault, damperDefault, maxImpact, 0, 1, RootTransform.Find(tree.StringHead));
-        tree.Chest.Init(this, springDefault, damperDefault, maxImpact, 0, 1, RootTransform.Find(tree.StringChest));
-        tree.Stomach.Init(this, springDefault, damperDefault, maxImpact, 0, 0, RootTransform.Find(tree.StringStomach));
+        Tree.Head.Init(this, springDefault, damperDefault, maxImpact, 0, 1, rootTransform.Find(Tree.StringHead));
+        Tree.Chest.Init(this, springDefault, damperDefault, maxImpact, 0, 1, rootTransform.Find(Tree.StringChest));
+        Tree.Stomach.Init(this, springDefault, damperDefault, maxImpact, 0, 0, rootTransform.Find(Tree.StringStomach));
 
-        tree.UpperArmLeft.Init(this, springDefault, damperDefault, maxImpact, -1, 1, RootTransform.Find(tree.StringUpperArmLeft));
-        tree.LowerArmLeft.Init(this, springDefault, damperDefault, maxImpact, -1, 1, RootTransform.Find(tree.StringLowerArmLeft));
-        tree.HandLeft.Init(this, springDefault, damperDefault, maxImpact, -1, 1, RootTransform.Find(tree.StringHandLeft));
+        Tree.UpperArmLeft.Init(this, springDefault, damperDefault, maxImpact, -1, 1, rootTransform.Find(Tree.StringUpperArmLeft));
+        Tree.LowerArmLeft.Init(this, springDefault, damperDefault, maxImpact, -1, 1, rootTransform.Find(Tree.StringLowerArmLeft));
+        Tree.HandLeft.Init(this, springDefault, damperDefault, maxImpact, -1, 1, rootTransform.Find(Tree.StringHandLeft));
 
-        tree.UpperArmRight.Init(this, springDefault, damperDefault, maxImpact, 1, 1, RootTransform.Find(tree.StringUpperArmRight));
-        tree.LowerArmRight.Init(this, springDefault, damperDefault, maxImpact, 1, 1, RootTransform.Find(tree.StringLowerArmRight));
-        tree.HandRight.Init(this, springDefault, damperDefault, maxImpact, 1, 1, RootTransform.Find(tree.StringHandRight));
+        Tree.UpperArmRight.Init(this, springDefault, damperDefault, maxImpact, 1, 1, rootTransform.Find(Tree.StringUpperArmRight));
+        Tree.LowerArmRight.Init(this, springDefault, damperDefault, maxImpact, 1, 1, rootTransform.Find(Tree.StringLowerArmRight));
+        Tree.HandRight.Init(this, springDefault, damperDefault, maxImpact, 1, 1, rootTransform.Find(Tree.StringHandRight));
 
-        tree.UpperLegLeft.Init(this, springDefault, damperDefault, maxImpact, -1, -1, RootTransform.Find(tree.StringUpperLegLeft));
-        tree.LowerLegLeft.Init(this, springDefault, damperDefault, maxImpact, -1, -1, RootTransform.Find(tree.StringLowerLegLeft));
-        tree.FootLeft.Init(this, springDefault, damperDefault, maxImpact, -1, -1, RootTransform.Find(tree.StringFootLeft));
+        Tree.UpperLegLeft.Init(this, springDefault, damperDefault, maxImpact, -1, -1, rootTransform.Find(Tree.StringUpperLegLeft));
+        Tree.LowerLegLeft.Init(this, springDefault, damperDefault, maxImpact, -1, -1, rootTransform.Find(Tree.StringLowerLegLeft));
+        Tree.FootLeft.Init(this, springDefault, damperDefault, maxImpact, -1, -1, rootTransform.Find(Tree.StringFootLeft));
 
-        tree.UpperLegRight.Init(this, springDefault, damperDefault, maxImpact, 1, -1, RootTransform.Find(tree.StringUpperLegRight));
-        tree.LowerLegRight.Init(this, springDefault, damperDefault, maxImpact, 1, -1, RootTransform.Find(tree.StringLowerLegRight));
-        tree.FootRight.Init(this, springDefault, damperDefault, maxImpact, 1, -1, RootTransform.Find(tree.StringFootRight));
+        Tree.UpperLegRight.Init(this, springDefault, damperDefault, maxImpact, 1, -1, rootTransform.Find(Tree.StringUpperLegRight));
+        Tree.LowerLegRight.Init(this, springDefault, damperDefault, maxImpact, 1, -1, rootTransform.Find(Tree.StringLowerLegRight));
+        Tree.FootRight.Init(this, springDefault, damperDefault, maxImpact, 1, -1, rootTransform.Find(Tree.StringFootRight));
 
-        for (int i = 0; i < tree.nodeList.Count; i++)
+        for (int i = 0; i < Tree.NodeList.Count; i++)
         {
-            if (tree.nodeList[i].Parent != null)
+            if (Tree.NodeList[i].Parent != null)
             {
-                CharacterNode root = tree.nodeList[i].Data;
-                CharacterNode parent = tree.nodeList[i].Parent.Data;
-                root.joint.connectedBody = parent.rigidbody;
+                CharacterNode root = Tree.NodeList[i].Data;
+                CharacterNode parent = Tree.NodeList[i].Parent.Data;
+                root.Joint.connectedBody = parent.Rigidbody;
                 JointDrive d = new JointDrive();
-                d.positionSpring = root.spring;
-                d.positionDamper = root.damper;
+                d.positionSpring = root.Spring;
+                d.positionDamper = root.Damper;
                 d.maximumForce = Mathf.Infinity;
-                root.joint.slerpDrive = d;
-                root.joint.xMotion = ConfigurableJointMotion.Locked;
-                root.joint.yMotion = ConfigurableJointMotion.Locked;
-                root.joint.zMotion = ConfigurableJointMotion.Locked;
-                root.joint.rotationDriveMode = RotationDriveMode.Slerp;
+                root.Joint.slerpDrive = d;
+                root.Joint.xMotion = ConfigurableJointMotion.Locked;
+                root.Joint.yMotion = ConfigurableJointMotion.Locked;
+                root.Joint.zMotion = ConfigurableJointMotion.Locked;
+                root.Joint.rotationDriveMode = RotationDriveMode.Slerp;
             }
         }
+        List = Tree.NodeList;
+
     }
 
     // UTILITIES //
@@ -66,9 +69,9 @@ public class Character : ScriptableObject
         Vector3 CoM = Vector3.zero;
         float sumOfWeights = 0f;
 
-        foreach (TreeNode<CharacterNode> node in tree.nodeList)
+        foreach (TreeNode<CharacterNode> node in Tree.NodeList)
         {
-            Rigidbody r = node.Data.rigidbody;
+            Rigidbody r = node.Data.Rigidbody;
             CoM += r.worldCenterOfMass * r.mass;
             sumOfWeights += r.mass;
         }
@@ -78,28 +81,27 @@ public class Character : ScriptableObject
     /// Returns node in character this transform belongs to.
     public TreeNode<CharacterNode> ContainsTransform(Transform transform)
     {
-        for (int i = 0; i < tree.nodeList.Count; i++)
+        for (int i = 0; i < Tree.NodeList.Count; i++)
         {
-            if (tree.nodeList[i].Data.transform == transform)
-                return tree.nodeList[i];
+            if (Tree.NodeList[i].Data.Transform == transform)
+                return Tree.NodeList[i];
         }
         return null;
     }
 
-
     /// Applies a world-space keyframe to this character.
     public void SetKeyframe(Keyframe keyframe)
     {
-        for (int i = 0; i < keyframe.tree.nodeList.Count; i++)
-            tree.nodeList[i].Data.SetNodeKeyframe(keyframe.tree.nodeList[i].Data.GetNodeKeyframe());
+        for (int i = 0; i < keyframe.Tree.NodeList.Count; i++)
+            Tree.NodeList[i].Data.SetNodeKeyframe(keyframe.Tree.NodeList[i].Data.GetNodeKeyframe());
     }
 
     /// Gets the current world-space keyframe of this character.
     public Keyframe GetKeyframe()
     {
         Keyframe currentKeyframe = new Keyframe();
-        for (int i = 0; i < tree.nodeList.Count; i++)
-            currentKeyframe.tree.nodeList[i].Data.SetNodeKeyframe(tree.nodeList[i].Data.GetNodeKeyframe());
+        for (int i = 0; i < Tree.NodeList.Count; i++)
+            currentKeyframe.Tree.NodeList[i].Data.SetNodeKeyframe(Tree.NodeList[i].Data.GetNodeKeyframe());
 
         return currentKeyframe;
     }

@@ -7,29 +7,30 @@ public class Player_Movement : MonoBehaviour
 {
     public event Action OnModeUpdate = delegate { };
     public enum ForceModeEnum { Position, Speed, Contact, MAX };
-    public ForceModeEnum forceMode;
+    public ForceModeEnum ForceMode { get; private set; }
 
     [SerializeField]
-    private Transform TargetCharacterRoot;
+    private Transform targetCharacterRoot;
     [SerializeField]
-    private Material GhostMaterial;
+    private Material ghostMaterial;
     [SerializeField]
-    private Vector3 ThrowDirection;
+    private Color ghostColor;
     [SerializeField]
-    private float ThrowForce;
+    private Vector3 throwDirection;
     [SerializeField]
-    private float ThrowRandomness;
+    private float throwForce;
+    [SerializeField]
+    private float throwRandomness;
+
     private Character character;
     private TargetCharacter targetCharacter = new TargetCharacter();
     private Player_NodeSelection selection;
     private Keyframe startKeyframe;
 
-    private Quaternion rootTargetRotation = Quaternion.identity;
-
     private void Start()
     {
-        targetCharacter.Init(TargetCharacterRoot);
-        character = FindObjectOfType<Character_Installer>().currentCharacter;
+        targetCharacter.Init(targetCharacterRoot);
+        character = FindObjectOfType<Character_Installer>().CurrentCharacter;
         selection = GetComponent<Player_NodeSelection>();
         startKeyframe = character.GetKeyframe();
         _LevelState.OnPlay += ApplyStartKeyframe;
@@ -45,7 +46,7 @@ public class Player_Movement : MonoBehaviour
 
     private void UpdateForceMode()
     {
-        forceMode += 1; if (forceMode == ForceModeEnum.MAX) forceMode = 0; OnModeUpdate();
+        ForceMode += 1; if (ForceMode == ForceModeEnum.MAX) ForceMode = 0; OnModeUpdate();
     }
 
     private void ApplyStartKeyframe()
@@ -55,35 +56,58 @@ public class Player_Movement : MonoBehaviour
     private void ThrowPlayer()
     {
         Keyframe thrownKeyframe = character.GetKeyframe();
-        Keyframe.ModifyForce(thrownKeyframe, ThrowDirection, ThrowForce, ThrowRandomness);
+        Keyframe.ModifyForce(thrownKeyframe, throwDirection, throwForce, throwRandomness);
         character.SetKeyframe(thrownKeyframe);
     }
 
     private void FixedUpdate()
     {
-        if (_Input.axisInput)
+        if (_Input.InputCharacter)
         {
-            if (selection.chain.Any() == true)
-                ChainMovement(selection.chain);
-            if (selection.chainMirror.Any() == true)
-                MirrorMovement(selection.chainMirror);
-            if (selection.chainFollow.Any() == true)
-                FollowMovement(selection.chainFollow);
+            if (selection.Chain.Any() == true)
+                ChainMovement();
+            if (selection.ChainMirror.Any() == true)
+                MirrorMovement();
+            if (selection.ChainFollow.Any() == true)
+                FollowMovement();
+        }
+        else
+            TargetPlayerMovement();
+    }
+
+    private void TargetPlayerMovement()
+    {
+        for (int i = 0; i < targetCharacter.List.Count; i++)
+        {
+            targetCharacter.List[i].Data.Transform.gameObject.SetActive(false);
         }
     }
 
-    private void ChainMovement(List<TreeNode<CharacterNode>> chain)
+    private void ChainMovement()
     {
-        for (int i = 0; i < chain.Count; i++)
+        for (int i = 0; i < character.List.Count; i++)
         {
+            if (character.List[i] == selection.Chain[0])
+            {
+                for (int j = i; j < selection.Chain.Count + i; j++)
+                {
+                    targetCharacter.List[j].Data.Transform.gameObject.SetActive(true);
+                    targetCharacter.List[j].Data.Transform.position =
+                        character.List[j].Data.Transform.position +
+                        character.List[j].Data.Transform.up.normalized;
 
+                    targetCharacter.List[j].Data.Transform.rotation =
+                        character.List[j].Data.Transform.rotation;
+                }
+                return;
+            }
         }
     }
-    private void MirrorMovement(List<TreeNode<CharacterNode>> chain)
+    private void MirrorMovement()
     {
 
     }
-    private void FollowMovement(List<TreeNode<CharacterNode>> chain)
+    private void FollowMovement()
     {
 
     }

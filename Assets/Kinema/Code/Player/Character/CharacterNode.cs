@@ -3,48 +3,48 @@ using System;
 
 public class CharacterNode : IKeyframeNode
 {
-    public Character character { get; private set; }
-    public float spring { get; private set; }
-    public float damper { get; private set; }
-    public Quaternion originalRotation { get; private set; }
-    public float maxImpactForce { get; private set; }
-    public int coordX { get; private set; }
-    public int coordY { get; private set; }
-    public Transform transform { get; private set; }
-    public Rigidbody rigidbody { get; private set; }
-    public Renderer renderer { get; private set; }
-    public ConfigurableJoint joint { get; private set; }
-    public float damage { get; private set; } = 0;
-    public bool selected = false;
+    public Character Character { get; private set; }
+    public float Spring { get; private set; }
+    public float Damper { get; private set; }
+    public Quaternion OriginalRotation { get; private set; }
+    public float MaxImpactForce { get; private set; }
+    public int CoordX { get; private set; }
+    public int CoordY { get; private set; }
+    public Transform Transform { get; private set; }
+    public Rigidbody Rigidbody { get; private set; }
+    public Renderer Renderer { get; private set; }
+    public ConfigurableJoint Joint { get; private set; }
+    public float Damage { get; private set; } = 0;
+    public bool Selected = false;
 
-    public void SetDamage(float Damage) { damage = Damage; }
+    public void SetDamage(float damage) { this.Damage = damage; }
 
     public void Init(Character Character, float Spring, float Damper, float MaxImpactForce, int CoordX, int CoordY, Transform Transform)
     {
-        character = Character;
-        spring = Spring;
-        damper = Damper;
-        maxImpactForce = MaxImpactForce;
-        coordX = CoordX;
-        coordY = CoordY;
-        transform = Transform;
-        originalRotation = transform.rotation;
-        rigidbody = transform.GetComponent<Rigidbody>();
-        renderer = transform.GetComponent<Renderer>();
-        if (transform.GetComponent<ConfigurableJoint>() != null)
-            joint = transform.GetComponent<ConfigurableJoint>();
+        this.Character = Character;
+        this.Spring = Spring;
+        this.Damper = Damper;
+        this.MaxImpactForce = MaxImpactForce;
+        this.CoordX = CoordX;
+        this.CoordY = CoordY;
+        this.Transform = Transform;
+        OriginalRotation = this.Transform.rotation;
+        Rigidbody = this.Transform.GetComponent<Rigidbody>();
+        Renderer = this.Transform.GetComponent<Renderer>();
+        if (this.Transform.GetComponent<ConfigurableJoint>() != null)
+            Joint = this.Transform.GetComponent<ConfigurableJoint>();
     }
 
     public KeyframeNode GetNodeKeyframe()
     {
-        KeyframeNode keyframeNode = new KeyframeNode(Vector3.zero, transform.position, transform.rotation);
+        KeyframeNode keyframeNode = new KeyframeNode(Vector3.zero, Transform.position, Transform.rotation);
         return keyframeNode;
     }
 
     public void SetNodeKeyframe(KeyframeNode keyframeNode)
     {
-        transform.position = keyframeNode.position;
-        transform.rotation = keyframeNode.rotation;
-        rigidbody.velocity = keyframeNode.velocity;
+        Transform.position = keyframeNode.Position;
+        Transform.rotation = keyframeNode.Rotation;
+        Rigidbody.velocity = keyframeNode.Velocity;
     }
 }

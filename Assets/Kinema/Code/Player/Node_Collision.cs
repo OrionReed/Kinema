@@ -6,10 +6,10 @@ public class Node_Collision : MonoBehaviour
 
     public static event Action<Collision, TreeNode<CharacterNode>> OnCollision = delegate { };
 
-    public TreeNode<CharacterNode> node;
+    public TreeNode<CharacterNode> Node;
 
     private void OnCollisionEnter(Collision other)
     {
-        OnCollision(other, node);
+        OnCollision(other, Node);
     }
 }

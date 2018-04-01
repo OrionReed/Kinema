@@ -7,8 +7,7 @@ public class _Camera : MonoBehaviour
 {
     public event Action OnModeUpdate = delegate { };
     public enum CameraModeEnum { Follow, Fixed, Free, MAX }
-    public CameraModeEnum cameraMode { get; private set; }
-    public float mouseSensitivity { get; private set; } = 180f;
+    public CameraModeEnum CameraMode { get; private set; }
 
     [SerializeField]
     private CameraMode_AutoFollow modeFollow;
@@ -21,28 +20,28 @@ public class _Camera : MonoBehaviour
     private void Start()
     {
         _Input.OnKeyCameraMode += UpdateCameraMode;
-        character = FindObjectOfType<Character_Installer>().currentCharacter;
+        character = FindObjectOfType<Character_Installer>().CurrentCharacter;
     }
     private void OnDisable() { _Input.OnKeyCameraMode -= UpdateCameraMode; }
 
     private void UpdateCameraMode()
     {
-        cameraMode += 1; if (cameraMode == CameraModeEnum.MAX) cameraMode = 0; OnModeUpdate();
+        CameraMode += 1; if (CameraMode == CameraModeEnum.MAX) CameraMode = 0; OnModeUpdate();
     }
 
     private void Update()
     {
         Vector3 target = character.GetCenterOfMass();
-        switch (cameraMode)
+        switch (CameraMode)
         {
             case CameraModeEnum.Follow:
-                modeFollow.ControlCamera(this, target, _Input.controlCamera);
+                modeFollow.ControlCamera(this, target, _Input.ControlCamera);
                 break;
             case CameraModeEnum.Fixed:
-                modeFixed.ControlCamera(this, target, _Input.controlCamera);
+                modeFixed.ControlCamera(this, target, _Input.ControlCamera);
                 break;
             case CameraModeEnum.Free:
-                modeFree.ControlCamera(this, target, _Input.controlCamera);
+                modeFree.ControlCamera(this, target, _Input.ControlCamera);
                 break;
         }
     }

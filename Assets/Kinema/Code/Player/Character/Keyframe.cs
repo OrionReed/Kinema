@@ -2,11 +2,11 @@
 
 public class Keyframe
 {
-    public _CharacterTree<KeyframeNode> tree { get; private set; } = new _CharacterTree<KeyframeNode>();
+    public _CharacterTree<KeyframeNode> Tree { get; private set; } = new _CharacterTree<KeyframeNode>();
 
-    public static void ModifyForce(Keyframe keyframe, Vector3 Direction, float Force, float Randomness)
+    public static void ModifyForce(Keyframe keyframe, Vector3 direction, float force, float randomness)
     {
-        foreach (TreeNode<KeyframeNode> node in keyframe.tree.nodeList)
-            node.Data.velocity = Direction.normalized * UnityEngine.Random.Range(Force - Randomness, Force + Randomness);
+        foreach (TreeNode<KeyframeNode> node in keyframe.Tree.NodeList)
+            node.Data.Velocity = direction.normalized * UnityEngine.Random.Range(force - randomness, force + randomness);
     }
 }

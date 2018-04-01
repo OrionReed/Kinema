@@ -1626,11 +1626,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbde0b340b765495883146d1b714f243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceMode: 1
-  GhostMaterial: {fileID: 2100000, guid: 0c28081e612a847f8b8d3079691ea692, type: 2}
-  ThrowDirection: {x: 0, y: 1, z: 1}
-  ThrowForce: 8
-  ThrowRandomness: 5
+  targetCharacterRoot: {fileID: 0}
+  ghostMaterial: {fileID: 2100000, guid: 0c28081e612a847f8b8d3079691ea692, type: 2}
+  ghostColor: {r: 0.9998712, g: 0.99998224, b: 0.9998411, a: 0.4957086}
+  throwDirection: {x: 0, y: 5, z: 1}
+  throwForce: 10
+  throwRandomness: 5
 --- !u!114 &114086955138431980
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6109,7 +6110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 472f84382a39b455086ca40ce2761b65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectionMode: 0
+  SelectionMode: 0
 --- !u!114 &114824969326729520
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6121,8 +6122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a25b7634ef948b4bd6bcd7414f0691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerRoot: {fileID: 4309424218751792}
-  Character: {fileID: 11400000, guid: b8d9af36e024541c8930d87f415b9932, type: 2}
+  playerRoot: {fileID: 4309424218751792}
+  character: {fileID: 11400000, guid: b8d9af36e024541c8930d87f415b9932, type: 2}
 --- !u!114 &114826139883560552
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6480,13 +6481,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d9a5daae7ea4320a37ae0d2924bc82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectionNone: {r: 1, g: 1, b: 1, a: 1}
-  SelectionRoot: {r: 0.15294118, g: 0.37254903, b: 0.86666673, a: 1}
-  SelectionChild: {r: 0.5019608, g: 0.72156864, b: 0.98823535, a: 1}
-  SelectionFollowRoot: {r: 0.24313727, g: 0.7294118, b: 0.227451, a: 1}
-  SelectionFollowChild: {r: 0.63529414, g: 0.83921576, b: 0.6627451, a: 1}
-  ColorLerpTime: 0.1
-  Hurt: {r: 1, g: 0, b: 0, a: 1}
+  colorNone: {r: 1, g: 1, b: 1, a: 1}
+  colorRoot: {r: 0.038646035, g: 0.35300472, b: 0.99834335, a: 1}
+  colorChild: {r: 0.5538886, g: 0.7581804, b: 0.99903965, a: 1}
+  colorRootFollow: {r: 0.2746774, g: 0.6858454, b: 0.084886774, a: 1}
+  colorChildFollow: {r: 0.644638, g: 0.98060566, b: 0.62151736, a: 1}
+  colorHurt: {r: 1, g: 0, b: 0, a: 1}
+  colorLerpTime: 0.1
 --- !u!114 &114882276629352342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7629,7 +7630,7 @@ ConfigurableJoint:
   m_GameObject: {fileID: 1966932628425618}
   m_ConnectedBody: {fileID: 0}
   m_Anchor: {x: 0.6, y: 0, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
+  m_Axis: {x: 0, y: 1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 8.068001, y: 33.957996, z: 13.05}
   serializedVersion: 2
@@ -7638,8 +7639,8 @@ ConfigurableJoint:
   m_YMotion: 2
   m_ZMotion: 2
   m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularYMotion: 0
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -7651,7 +7652,7 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: 0
+    limit: -90
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
@@ -7662,7 +7663,7 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 67.104294
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
@@ -8099,7 +8100,7 @@ ConfigurableJoint:
   m_GameObject: {fileID: 1818521356871006}
   m_ConnectedBody: {fileID: 0}
   m_Anchor: {x: -0.62, y: 0, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
+  m_Axis: {x: 0, y: -1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 10.181969, y: 33.957996, z: 13.05}
   serializedVersion: 2
@@ -8107,8 +8108,8 @@ ConfigurableJoint:
   m_XMotion: 2
   m_YMotion: 2
   m_ZMotion: 2
-  m_AngularXMotion: 0
-  m_AngularYMotion: 1
+  m_AngularXMotion: 1
+  m_AngularYMotion: 0
   m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
@@ -8121,7 +8122,7 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: 0
+    limit: -90
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:

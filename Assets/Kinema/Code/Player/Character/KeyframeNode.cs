@@ -2,16 +2,16 @@
 
 public class KeyframeNode : IKeyframeNode
 {
-    public Vector3 velocity;
-    public Vector3 position;
-    public Quaternion rotation;
+    public Vector3 Velocity { get; set; }
+    public Vector3 Position { get; private set; }
+    public Quaternion Rotation { get; private set; }
 
     public KeyframeNode() { }
-    public KeyframeNode(Vector3 Velocity, Vector3 Position, Quaternion Rotation)
+    public KeyframeNode(Vector3 velocity, Vector3 position, Quaternion rotation)
     {
-        velocity = Velocity;
-        position = Position;
-        rotation = Rotation;
+        this.Velocity = velocity;
+        this.Position = position;
+        this.Rotation = rotation;
     }
 
     public KeyframeNode GetNodeKeyframe()
@@ -21,8 +21,8 @@ public class KeyframeNode : IKeyframeNode
 
     public void SetNodeKeyframe(KeyframeNode keyframeNode)
     {
-        position = keyframeNode.position;
-        rotation = keyframeNode.rotation;
-        velocity = keyframeNode.velocity;
+        Position = keyframeNode.Position;
+        Rotation = keyframeNode.Rotation;
+        Velocity = keyframeNode.Velocity;
     }
 }

@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class _CharacterTree<T> where T : new()
 {
-    public TreeNode<T> root { get; private set; }
-    public List<TreeNode<T>> nodeList { get; private set; }
+    public TreeNode<T> Root { get; private set; }
+    public List<TreeNode<T>> NodeList { get; private set; }
 
     public T Head { get; private set; } = new T();
     public T Chest { get; private set; } = new T();
@@ -40,17 +40,17 @@ public class _CharacterTree<T> where T : new()
 
     public _CharacterTree()
     {
-        root = new TreeNode<T>(Stomach);
-        root.AddChild(UpperLegLeft).AddChild(LowerLegLeft).AddChild(FootLeft);
-        root.AddChild(UpperLegRight).AddChild(LowerLegRight).AddChild(FootRight);
-        var c = root.AddChild(Chest);
+        Root = new TreeNode<T>(Stomach);
+        Root.AddChild(UpperLegLeft).AddChild(LowerLegLeft).AddChild(FootLeft);
+        Root.AddChild(UpperLegRight).AddChild(LowerLegRight).AddChild(FootRight);
+        var c = Root.AddChild(Chest);
         c.AddChild(Head);
         c.AddChild(UpperArmLeft).AddChild(LowerArmLeft).AddChild(HandLeft);
         c.AddChild(UpperArmRight).AddChild(LowerArmRight).AddChild(HandRight);
 
-        nodeList = new List<TreeNode<T>>();
-        nodeList.Add(root);
-        nodeList.AddRange(_CharacterTree<T>.GetChildren(root));
+        NodeList = new List<TreeNode<T>>();
+        NodeList.Add(Root);
+        NodeList.AddRange(_CharacterTree<T>.GetChildren(Root));
     }
 
     /// Returns an array with all subsequent children of this node, excluding this node.
@@ -67,14 +67,14 @@ public class _CharacterTree<T> where T : new()
     /// Returns opposite node on X axis (left / right)
     public TreeNode<CharacterNode> GetOpposite(TreeNode<CharacterNode> node)
     {
-        List<TreeNode<CharacterNode>> nodeList = node.Data.character.tree.nodeList;
+        List<TreeNode<CharacterNode>> list = node.Data.Character.List;
 
-        for (int i = 0; i < nodeList.Count; i++)
+        for (int i = 0; i < list.Count; i++)
         {
-            if (nodeList[i].Data.coordX == -node.Data.coordX)
-                if (nodeList[i].Data.coordY == node.Data.coordY)
-                    if (nodeList[i].Level == node.Level)
-                        return nodeList[i];
+            if (list[i].Data.CoordX == -node.Data.CoordX)
+                if (list[i].Data.CoordY == node.Data.CoordY)
+                    if (list[i].Level == node.Level)
+                        return list[i];
         }
         return node;
     }

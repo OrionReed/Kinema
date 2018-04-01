@@ -5,19 +5,19 @@ using System.Collections.Generic;
 public class Player_Color : MonoBehaviour
 {
     [SerializeField]
-    private Color ColorNone = Color.white;
+    private Color colorNone = Color.white;
     [SerializeField]
-    private Color ColorRoot = Color.white;
+    private Color colorRoot = Color.white;
     [SerializeField]
-    private Color ColorChild = Color.white;
+    private Color colorChild = Color.white;
     [SerializeField]
-    private Color ColorRootFollow = Color.white;
+    private Color colorRootFollow = Color.white;
     [SerializeField]
-    private Color ColorChildFollow = Color.white;
+    private Color colorChildFollow = Color.white;
     [SerializeField]
-    private float ColorLerpTime = 0.1f;
+    private Color colorHurt = Color.red;
     [SerializeField]
-    private Color Hurt = Color.red;
+    private float colorLerpTime = 0.1f;
 
     private Player_NodeSelection selection;
 
@@ -32,47 +32,47 @@ public class Player_Color : MonoBehaviour
     private void UpdateHealthColor(CharacterNode node)
     {
         IEnumerator coroutine = LerpToColor(
-            ColorLerpTime,
-            Color.Lerp(ColorNone, Hurt, node.damage),
-            node.renderer.material);
+            colorLerpTime,
+            Color.Lerp(colorNone, colorHurt, node.Damage),
+            node.Renderer.material);
         StartCoroutine(coroutine);
     }
 
     private void UpdateSelectionColor()
     {
         Color selectionColor = Color.magenta;
-        for (int i = 0; i < selection.nodeList.Count; i++)
+        for (int i = 0; i < selection.List.Count; i++)
         {
-            if (selection.nodeList[i].Data.selected == false)
+            if (selection.List[i].Data.Selected == false)
             {
-                selectionColor = ColorNone;
-                IEnumerator coroutine = LerpToColor(ColorLerpTime, selectionColor, selection.nodeList[i].Data.renderer.material);
+                selectionColor = colorNone;
+                IEnumerator coroutine = LerpToColor(colorLerpTime, selectionColor, selection.List[i].Data.Renderer.material);
                 StartCoroutine(coroutine);
             }
         }
 
-        for (int i = 0; i < selection.chain.Count; i++)
+        for (int i = 0; i < selection.Chain.Count; i++)
         {
             IEnumerator coroutine = LerpToColor(
-                ColorLerpTime,
-                selectionColor = i == 0 ? ColorRoot : ColorChild,
-                selection.chain[i].Data.renderer.material);
+                colorLerpTime,
+                selectionColor = i == 0 ? colorRoot : colorChild,
+                selection.Chain[i].Data.Renderer.material);
             StartCoroutine(coroutine);
         }
-        for (int i = 0; i < selection.chainFollow.Count; i++)
+        for (int i = 0; i < selection.ChainFollow.Count; i++)
         {
             IEnumerator coroutine = LerpToColor(
-                ColorLerpTime,
-                selectionColor = i == 0 ? ColorRootFollow : ColorChildFollow,
-                selection.chainFollow[i].Data.renderer.material);
+                colorLerpTime,
+                selectionColor = i == 0 ? colorRootFollow : colorChildFollow,
+                selection.ChainFollow[i].Data.Renderer.material);
             StartCoroutine(coroutine);
         }
-        for (int i = 0; i < selection.chainMirror.Count; i++)
+        for (int i = 0; i < selection.ChainMirror.Count; i++)
         {
             IEnumerator coroutine = LerpToColor(
-                ColorLerpTime,
-                selectionColor = i == 0 ? ColorRoot : ColorChild,
-                selection.chainMirror[i].Data.renderer.material);
+                colorLerpTime,
+                selectionColor = i == 0 ? colorRoot : colorChild,
+                selection.ChainMirror[i].Data.Renderer.material);
             StartCoroutine(coroutine);
         }
     }

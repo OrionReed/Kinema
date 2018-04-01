@@ -51,13 +51,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a3e90550aa0745a8816ac641c4015a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectionMode: 118
-  ForceMode: 102
-  CameraMode: 99
-  ToggleGravity: 103
-  RestartScene: 13
-  Letterbox: 108
-  FastCamera: 304
-  TimeSpeedUp: 50
-  TimeSpeedDown: 49
-  Throw: 32
+  selectionMode: 118
+  forceMode: 98
+  cameraMode: 99
+  resetScene: 13
+  letterbox: 108
+  fastCamera: 304
+  timeSpeedUp: 50
+  timeSpeedDown: 49
+  throwPlayer: 32

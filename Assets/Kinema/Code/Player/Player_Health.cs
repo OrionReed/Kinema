@@ -15,9 +15,9 @@ public class Player_Health : MonoBehaviour
 
     public void Collided(Collision collision, TreeNode<CharacterNode> node)
     {
-        node.Data.SetDamage(Mathf.Clamp(collision.relativeVelocity.magnitude / node.Data.maxImpactForce, 0, 1));
+        node.Data.SetDamage(Mathf.Clamp(collision.relativeVelocity.magnitude / node.Data.MaxImpactForce, 0, 1));
         OnNodeDamaged(node.Data);
-        if (node.Data.damage == 1)
+        if (node.Data.Damage == 1)
             OnPlayerDeath();
     }
 }

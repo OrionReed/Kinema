@@ -2,26 +2,26 @@
 
 public class TargetNode : IKeyframeNode
 {
-    public Transform transform { get; private set; }
-    public Renderer renderer { get; private set; }
+    public Transform Transform { get; private set; }
+    public Renderer Renderer { get; private set; }
 
     public TargetNode() { }
 
-    public void Init(Transform Transform, Renderer Renderer)
+    public void Init(Transform transform, Renderer renderer)
     {
-        transform = Transform;
-        renderer = Renderer;
+        this.Transform = transform;
+        this.Renderer = renderer;
     }
 
     public KeyframeNode GetNodeKeyframe()
     {
-        KeyframeNode keyframeNode = new KeyframeNode(Vector3.zero, transform.position, transform.rotation);
+        KeyframeNode keyframeNode = new KeyframeNode(Vector3.zero, Transform.position, Transform.rotation);
         return keyframeNode;
     }
 
     public void SetNodeKeyframe(KeyframeNode keyframeNode)
     {
-        transform.position = keyframeNode.position;
-        transform.rotation = keyframeNode.rotation;
+        Transform.position = keyframeNode.Position;
+        Transform.rotation = keyframeNode.Rotation;
     }
 }

@@ -2,19 +2,19 @@
 
 public class Character_Installer : MonoBehaviour
 {
-    public Character currentCharacter { get; private set; }
+    public Character CurrentCharacter { get; private set; }
 
     [SerializeField]
-    private Transform PlayerRoot;
+    private Transform playerRoot;
     [SerializeField]
-    private Character Character;
+    private Character character;
     private void Awake()
     {
-        if (Character == null || PlayerRoot == null)
+        if (character == null || playerRoot == null)
             Debug.LogError("Player_Installer not set up.");
-        currentCharacter = Character;
-        currentCharacter.Init(PlayerRoot);
-        foreach (TreeNode<CharacterNode> node in currentCharacter.tree.nodeList)
-            node.Data.transform.gameObject.AddComponent<Node_Collision>().node = node;
+        CurrentCharacter = character;
+        CurrentCharacter.Init(playerRoot);
+        foreach (TreeNode<CharacterNode> node in CurrentCharacter.List)
+            node.Data.Transform.gameObject.AddComponent<Node_Collision>().Node = node;
     }
 }

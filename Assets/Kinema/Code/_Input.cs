@@ -3,83 +3,95 @@ using UnityEngine;
 
 public class _Input : MonoBehaviour
 {
+    /// Change selection mode
     public static event Action OnKeySelectionMode = delegate { };
+    /// Change force mode
     public static event Action OnKeyForceMode = delegate { };
+    /// Change camera mode
     public static event Action OnKeyCameraMode = delegate { };
-    public static event Action OnKeyToggleGravity = delegate { };
-    public static event Action OnKeyRestartScene = delegate { };
+    /// Reset scene to beginning
+    public static event Action OnKeyResetScene = delegate { };
+    /// Toggle letterbox
     public static event Action OnKeyLetterbox = delegate { };
+    /// Speed up time
     public static event Action OnKeyTimeSpeedUp = delegate { };
+    /// Slow down time
     public static event Action OnKeyTimeSpeedDown = delegate { };
-    public static event Action OnClickLeft = delegate { };
+    /// Select something with click
+    public static event Action OnClickSelect = delegate { };
+    /// Throw character
     public static event Action OnKeyThrow = delegate { };
 
-    public static bool controlCamera { get; private set; }
-    public static bool axisInput { get; private set; }
-    public static bool fastCamera { get; private set; }
-    public static Vector2 mouseAxis { get; private set; }
-    public static Vector2 cameraOrbitDirection { get; private set; }
-    public static Vector3 inputDirection { get; private set; }
-    public static Quaternion inputRotation { get; private set; }
+    /// Inputting character movement?
+    public static bool InputCharacter { get; private set; }
+    /// Change selection mode
+    public static Quaternion InputCharacterRotation { get; private set; }
+    /// Controlling the main camera?
+    public static bool ControlCamera { get; private set; }
+    /// Moving camera fast?
+    public static bool FastCamera { get; private set; }
+    /// Direction of mouse orbit rotation
+    public static Vector2 CameraOrbitDirection { get; private set; }
+    /// Camera input movement vector
+    public static Vector3 InputCameraDirection { get; private set; }
+    /// Direction of mouse movement
+    public static Vector2 MouseAxis { get; private set; }
 
     [SerializeField]
-    private KeyCode SelectionMode;
+    private KeyCode selectionMode;
     [SerializeField]
-    private KeyCode ForceMode;
+    private KeyCode forceMode;
     [SerializeField]
-    private KeyCode CameraMode;
+    private KeyCode cameraMode;
     [SerializeField]
-    private KeyCode ToggleGravity;
+    private KeyCode resetScene;
     [SerializeField]
-    private KeyCode RestartScene;
+    private KeyCode letterbox;
     [SerializeField]
-    private KeyCode Letterbox;
+    private KeyCode fastCamera;
     [SerializeField]
-    private KeyCode FastCamera;
+    private KeyCode timeSpeedUp;
     [SerializeField]
-    private KeyCode TimeSpeedUp;
+    private KeyCode timeSpeedDown;
     [SerializeField]
-    private KeyCode TimeSpeedDown;
-    [SerializeField]
-    private KeyCode Throw;
+    private KeyCode throwPlayer;
 
     private void Awake()
     {
-        inputDirection = Vector3.zero;
-        inputRotation = Quaternion.identity;
-        controlCamera = false;
-        axisInput = false;
-        fastCamera = false;
+        InputCameraDirection = Vector3.zero;
+        InputCharacterRotation = Quaternion.identity;
+        ControlCamera = false;
+        InputCharacter = false;
+        FastCamera = false;
     }
 
     private void Update()
     {
-        if (_LevelState.currentState != _LevelState.States.Dead)
+        if (_LevelState.CurrentState != _LevelState.States.Dead)
         {
-            if (Input.GetKeyDown(SelectionMode)) OnKeySelectionMode();
-            if (Input.GetKeyDown(ForceMode)) OnKeyForceMode();
-            if (Input.GetKeyDown(ToggleGravity)) OnKeyToggleGravity();
-            if (Input.GetKeyDown(Letterbox)) OnKeyLetterbox();
-            if (inputRotation != Quaternion.identity) axisInput = true; else axisInput = false;
+            if (Input.GetKeyDown(selectionMode)) OnKeySelectionMode();
+            if (Input.GetKeyDown(forceMode)) OnKeyForceMode();
+            if (Input.GetKeyDown(letterbox)) OnKeyLetterbox();
+            if (Input.GetKeyDown(throwPlayer)) OnKeyThrow();
+            if (InputCharacterRotation != Quaternion.identity) InputCharacter = true; else InputCharacter = false;
         }
-        inputDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        cameraOrbitDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        if (Input.GetKeyDown(CameraMode)) OnKeyCameraMode();
-        if (Input.GetKeyDown(RestartScene)) OnKeyRestartScene();
-        if (Input.GetKeyDown(TimeSpeedUp)) OnKeyTimeSpeedUp();
-        if (Input.GetKeyDown(TimeSpeedDown)) OnKeyTimeSpeedDown();
-        if (Input.GetKeyDown(Throw)) OnKeyThrow();
-        if (Input.GetMouseButtonDown(0)) OnClickLeft();
+        InputCameraDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        CameraOrbitDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (Input.GetKeyDown(cameraMode)) OnKeyCameraMode();
+        if (Input.GetKeyDown(resetScene)) OnKeyResetScene();
+        if (Input.GetKeyDown(timeSpeedUp)) OnKeyTimeSpeedUp();
+        if (Input.GetKeyDown(timeSpeedDown)) OnKeyTimeSpeedDown();
+        if (Input.GetMouseButtonDown(0)) OnClickSelect();
 
-        if (Input.GetMouseButton(1)) controlCamera = true; else controlCamera = false;
-        if (Input.GetKey(FastCamera)) fastCamera = true; else fastCamera = false;
+        if (Input.GetMouseButton(1)) ControlCamera = true; else ControlCamera = false;
+        if (Input.GetKey(fastCamera)) FastCamera = true; else FastCamera = false;
 
-        mouseAxis = new Vector2(Input.GetAxisRaw("Mouse X") / Time.timeScale, Input.GetAxisRaw("Mouse Y") / Time.timeScale);
+        MouseAxis = new Vector2(Input.GetAxisRaw("Mouse X") / Time.timeScale, Input.GetAxisRaw("Mouse Y") / Time.timeScale);
     }
 
     void FixedUpdate()
     {
-        inputRotation =
+        InputCharacterRotation =
         Quaternion.AngleAxis(Input.GetAxisRaw("Yaw") * 45, Vector3.right) *
         Quaternion.AngleAxis(-Input.GetAxisRaw("Pitch") * 45, Vector3.forward) *
         Quaternion.AngleAxis(Input.GetAxisRaw("Roll") * 45, Vector3.up);

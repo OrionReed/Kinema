@@ -3,19 +3,19 @@ using UnityEngine;
 
 public class _ReinitializeObjects : MonoBehaviour
 {
-    private static _ReinitializeObjects Instance;
+    private static _ReinitializeObjects instance;
 
     private IList<IInitializeOnReload> reinitializeList;
 
     void Awake()
     {
-        if (Instance)
+        if (instance)
         {
             Debug.LogWarning("There can only be one instance of _ReinitializeObjects");
             DestroyImmediate(gameObject);
         }
         else
-            Instance = this;
+            instance = this;
     }
     void Start()
     {
@@ -23,7 +23,7 @@ public class _ReinitializeObjects : MonoBehaviour
     }
     public static void Reinitialize()
     {
-        foreach (IInitializeOnReload init in Instance.reinitializeList)
+        foreach (IInitializeOnReload init in instance.reinitializeList)
             init.Reinitialize();
     }
 }

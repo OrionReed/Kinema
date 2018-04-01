@@ -14,19 +14,19 @@ public class _UserInterface : MonoBehaviour
     private _TimeControl timeControl;
 
     [SerializeField]
-    private Text SelectionModeText;
+    private Text textSelectionMode;
     [SerializeField]
-    private Text ForceModeText;
+    private Text textForceMode;
     [SerializeField]
-    private Text CameraModeText;
+    private Text textCameraMode;
     [SerializeField]
-    private Text TimeScaleText;
+    private Text textTimescale;
     [SerializeField]
-    private Color TextColor = Color.black;
+    private Color uiColor = Color.black;
     [SerializeField]
-    private float TextSolidTime = 1;
+    private float solidTime = 1;
     [SerializeField]
-    private float TextFadeTime = 1;
+    private float fadeTime = 1;
 
     IEnumerator co1;
     IEnumerator co2;
@@ -35,20 +35,20 @@ public class _UserInterface : MonoBehaviour
 
     private void Awake()
     {
-        CameraModeText.text = "";
-        ForceModeText.text = "";
-        SelectionModeText.text = "";
-        TimeScaleText.text = "";
+        textCameraMode.text = "";
+        textForceMode.text = "";
+        textSelectionMode.text = "";
+        textTimescale.text = "";
 
-        CameraModeText.color = Color.clear;
-        SelectionModeText.color = Color.clear;
-        ForceModeText.color = Color.clear;
-        TimeScaleText.color = Color.clear;
+        textCameraMode.color = Color.clear;
+        textSelectionMode.color = Color.clear;
+        textForceMode.color = Color.clear;
+        textTimescale.color = Color.clear;
 
-        co1 = ShowText(CameraModeText, "", "");
-        co2 = ShowText(ForceModeText, "", "");
-        co3 = ShowText(SelectionModeText, "", "");
-        co4 = ShowText(TimeScaleText, "", "");
+        co1 = ShowText(textCameraMode, "", "");
+        co2 = ShowText(textForceMode, "", "");
+        co3 = ShowText(textSelectionMode, "", "");
+        co4 = ShowText(textTimescale, "", "");
 
         StartCoroutine(co1);
         StartCoroutine(co2);
@@ -83,25 +83,25 @@ public class _UserInterface : MonoBehaviour
     private void DisplayCameraState()
     {
         StopCoroutine(co1);
-        co1 = ShowText(CameraModeText, "CAMERA: ", cam.cameraMode.ToString());
+        co1 = ShowText(textCameraMode, "CAMERA: ", cam.CameraMode.ToString());
         StartCoroutine(co1);
     }
     private void DisplayForceState()
     {
         StopCoroutine(co2);
-        co2 = ShowText(ForceModeText, "FORCE: ", movement.forceMode.ToString());
+        co2 = ShowText(textForceMode, "FORCE: ", movement.ForceMode.ToString());
         StartCoroutine(co2);
     }
     private void DisplaySelectionState()
     {
         StopCoroutine(co3);
-        co3 = ShowText(SelectionModeText, "SELECTION: ", selection.selectionMode.ToString());
+        co3 = ShowText(textSelectionMode, "SELECTION: ", selection.SelectionMode.ToString());
         StartCoroutine(co3);
     }
     private void DisplayTimeScale()
     {
         StopCoroutine(co4);
-        co4 = ShowText(TimeScaleText, "TIME: 1 / ", timeControl.timeFraction.ToString());
+        co4 = ShowText(textTimescale, "TIME: 1 / ", timeControl.TimeFraction.ToString());
         StartCoroutine(co4);
     }
     private IEnumerator ShowText(Text uiText, string textPrefix, string text)
@@ -109,18 +109,18 @@ public class _UserInterface : MonoBehaviour
         uiText.text = textPrefix + text;
         float solidElapsed = 0;
         float fadeElapseded = 0;
-        uiText.color = TextColor;
+        uiText.color = uiColor;
         Color endColor = uiText.color;
         endColor.a = 0;
 
-        while (solidElapsed < TextSolidTime)
+        while (solidElapsed < solidTime)
         {
             yield return null;
             solidElapsed += Time.deltaTime / Time.timeScale;
         }
-        while (fadeElapseded < TextFadeTime)
+        while (fadeElapseded < fadeTime)
         {
-            uiText.color = Color.Lerp(TextColor, endColor, fadeElapseded / TextFadeTime);
+            uiText.color = Color.Lerp(uiColor, endColor, fadeElapseded / fadeTime);
             fadeElapseded += Time.deltaTime / Time.timeScale;
             yield return null;
         }
