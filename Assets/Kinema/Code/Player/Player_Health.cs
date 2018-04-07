@@ -5,6 +5,7 @@ public class Player_Health : MonoBehaviour
 {
     public event Action<CharacterNode> OnNodeDamaged = delegate { };
     public event Action OnPlayerDeath = delegate { };
+
     [SerializeField]
     private AnimationCurve impactForce;
 

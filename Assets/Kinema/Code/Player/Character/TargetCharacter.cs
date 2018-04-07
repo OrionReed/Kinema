@@ -3,46 +3,43 @@ using System.Collections.Generic;
 
 public class TargetCharacter
 {
-    public _CharacterTree<TargetNode> Tree { get; private set; } = new _CharacterTree<TargetNode>();
-    public List<TreeNode<TargetNode>> List { get; private set; } = new List<TreeNode<TargetNode>>();
+    public _CharacterTree<TargetNode> CharacterTree { get; private set; } = new _CharacterTree<TargetNode>();
     public void Init(Transform rootTransform)
     {
-        Tree.Head.Init(rootTransform.Find(Tree.StringHead), rootTransform.Find(Tree.StringHead).GetComponent<Renderer>());
-        Tree.Chest.Init(rootTransform.Find(Tree.StringChest), rootTransform.Find(Tree.StringChest).GetComponent<Renderer>());
-        Tree.Stomach.Init(rootTransform.Find(Tree.StringStomach), rootTransform.Find(Tree.StringStomach).GetComponent<Renderer>());
+        CharacterTree.Head.Init(rootTransform.Find(CharacterTree.StringHead), rootTransform.Find(CharacterTree.StringHead).GetComponent<Renderer>());
+        CharacterTree.Chest.Init(rootTransform.Find(CharacterTree.StringChest), rootTransform.Find(CharacterTree.StringChest).GetComponent<Renderer>());
+        CharacterTree.Stomach.Init(rootTransform.Find(CharacterTree.StringStomach), rootTransform.Find(CharacterTree.StringStomach).GetComponent<Renderer>());
 
-        Tree.UpperArmLeft.Init(rootTransform.Find(Tree.StringUpperArmLeft), rootTransform.Find(Tree.StringUpperArmLeft).GetComponent<Renderer>());
-        Tree.LowerArmLeft.Init(rootTransform.Find(Tree.StringLowerArmLeft), rootTransform.Find(Tree.StringLowerArmLeft).GetComponent<Renderer>());
-        Tree.HandLeft.Init(rootTransform.Find(Tree.StringHandLeft), rootTransform.Find(Tree.StringHandLeft).GetComponent<Renderer>());
+        CharacterTree.UpperArmLeft.Init(rootTransform.Find(CharacterTree.StringUpperArmLeft), rootTransform.Find(CharacterTree.StringUpperArmLeft).GetComponent<Renderer>());
+        CharacterTree.LowerArmLeft.Init(rootTransform.Find(CharacterTree.StringLowerArmLeft), rootTransform.Find(CharacterTree.StringLowerArmLeft).GetComponent<Renderer>());
+        CharacterTree.HandLeft.Init(rootTransform.Find(CharacterTree.StringHandLeft), rootTransform.Find(CharacterTree.StringHandLeft).GetComponent<Renderer>());
 
-        Tree.UpperArmRight.Init(rootTransform.Find(Tree.StringUpperArmRight), rootTransform.Find(Tree.StringUpperArmRight).GetComponent<Renderer>());
-        Tree.LowerArmRight.Init(rootTransform.Find(Tree.StringLowerArmRight), rootTransform.Find(Tree.StringLowerArmRight).GetComponent<Renderer>());
-        Tree.HandRight.Init(rootTransform.Find(Tree.StringHandRight), rootTransform.Find(Tree.StringHandRight).GetComponent<Renderer>());
+        CharacterTree.UpperArmRight.Init(rootTransform.Find(CharacterTree.StringUpperArmRight), rootTransform.Find(CharacterTree.StringUpperArmRight).GetComponent<Renderer>());
+        CharacterTree.LowerArmRight.Init(rootTransform.Find(CharacterTree.StringLowerArmRight), rootTransform.Find(CharacterTree.StringLowerArmRight).GetComponent<Renderer>());
+        CharacterTree.HandRight.Init(rootTransform.Find(CharacterTree.StringHandRight), rootTransform.Find(CharacterTree.StringHandRight).GetComponent<Renderer>());
 
-        Tree.UpperLegLeft.Init(rootTransform.Find(Tree.StringUpperLegLeft), rootTransform.Find(Tree.StringUpperLegLeft).GetComponent<Renderer>());
-        Tree.LowerLegLeft.Init(rootTransform.Find(Tree.StringLowerLegLeft), rootTransform.Find(Tree.StringLowerLegLeft).GetComponent<Renderer>());
-        Tree.FootLeft.Init(rootTransform.Find(Tree.StringFootLeft), rootTransform.Find(Tree.StringFootLeft).GetComponent<Renderer>());
+        CharacterTree.UpperLegLeft.Init(rootTransform.Find(CharacterTree.StringUpperLegLeft), rootTransform.Find(CharacterTree.StringUpperLegLeft).GetComponent<Renderer>());
+        CharacterTree.LowerLegLeft.Init(rootTransform.Find(CharacterTree.StringLowerLegLeft), rootTransform.Find(CharacterTree.StringLowerLegLeft).GetComponent<Renderer>());
+        CharacterTree.FootLeft.Init(rootTransform.Find(CharacterTree.StringFootLeft), rootTransform.Find(CharacterTree.StringFootLeft).GetComponent<Renderer>());
 
-        Tree.UpperLegRight.Init(rootTransform.Find(Tree.StringUpperLegRight), rootTransform.Find(Tree.StringUpperLegRight).GetComponent<Renderer>());
-        Tree.LowerLegRight.Init(rootTransform.Find(Tree.StringLowerLegRight), rootTransform.Find(Tree.StringLowerLegRight).GetComponent<Renderer>());
-        Tree.FootRight.Init(rootTransform.Find(Tree.StringFootRight), rootTransform.Find(Tree.StringFootRight).GetComponent<Renderer>());
-
-        List = Tree.NodeList;
+        CharacterTree.UpperLegRight.Init(rootTransform.Find(CharacterTree.StringUpperLegRight), rootTransform.Find(CharacterTree.StringUpperLegRight).GetComponent<Renderer>());
+        CharacterTree.LowerLegRight.Init(rootTransform.Find(CharacterTree.StringLowerLegRight), rootTransform.Find(CharacterTree.StringLowerLegRight).GetComponent<Renderer>());
+        CharacterTree.FootRight.Init(rootTransform.Find(CharacterTree.StringFootRight), rootTransform.Find(CharacterTree.StringFootRight).GetComponent<Renderer>());
     }
 
     /// Applies a world-space keyframe to this character.
-    public void SetKeyframe(Keyframe keyframe)
+    public void SetKeyframe(CharacterKeyframe keyframe)
     {
         for (int i = 0; i < keyframe.Tree.NodeList.Count; i++)
-            Tree.NodeList[i].Data.SetNodeKeyframe(keyframe.Tree.NodeList[i].Data.GetNodeKeyframe());
+            CharacterTree.NodeList[i].Data.SetNodeKeyframe(keyframe.Tree.NodeList[i].Data.GetNodeKeyframe());
     }
 
     /// Gets the current world-space keyframe of this character.
-    public Keyframe GetKeyframe()
+    public CharacterKeyframe GetKeyframe()
     {
-        Keyframe currentKeyframe = new Keyframe();
-        for (int i = 0; i < Tree.NodeList.Count; i++)
-            currentKeyframe.Tree.NodeList[i].Data.SetNodeKeyframe(Tree.NodeList[i].Data.GetNodeKeyframe());
+        CharacterKeyframe currentKeyframe = new CharacterKeyframe();
+        for (int i = 0; i < CharacterTree.NodeList.Count; i++)
+            currentKeyframe.Tree.NodeList[i].Data.SetNodeKeyframe(CharacterTree.NodeList[i].Data.GetNodeKeyframe());
 
         return currentKeyframe;
     }

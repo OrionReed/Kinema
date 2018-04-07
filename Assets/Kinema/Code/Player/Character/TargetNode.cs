@@ -13,13 +13,13 @@ public class TargetNode : IKeyframeNode
         this.Renderer = renderer;
     }
 
-    public KeyframeNode GetNodeKeyframe()
+    public CharacterKeyframeNode GetNodeKeyframe()
     {
-        KeyframeNode keyframeNode = new KeyframeNode(Vector3.zero, Transform.position, Transform.rotation);
+        CharacterKeyframeNode keyframeNode = new CharacterKeyframeNode(Vector3.zero, Transform.position, Transform.rotation);
         return keyframeNode;
     }
 
-    public void SetNodeKeyframe(KeyframeNode keyframeNode)
+    public void SetNodeKeyframe(CharacterKeyframeNode keyframeNode)
     {
         Transform.position = keyframeNode.Position;
         Transform.rotation = keyframeNode.Rotation;

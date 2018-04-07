@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IKeyframeNode
 {
-    KeyframeNode GetNodeKeyframe();
-    void SetNodeKeyframe(KeyframeNode keyframe);
+    CharacterKeyframeNode GetNodeKeyframe();
+    void SetNodeKeyframe(CharacterKeyframeNode keyframe);
 }

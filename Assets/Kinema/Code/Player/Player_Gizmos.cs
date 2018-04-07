@@ -18,7 +18,7 @@ public class Player_Gizmos : MonoBehaviour
     private void Start()
     {
         selection = FindObjectOfType<Player_NodeSelection>();
-        character = FindObjectOfType<Character_Installer>().CurrentCharacter;
+        character = FindObjectOfType<Player_Character>().PlayerCharacter;
     }
     private void Update()
     {
@@ -39,10 +39,10 @@ public class Player_Gizmos : MonoBehaviour
     void DrawRuntimeGizmos()
     {
         Gizmos.color = gizmoColor;
-        Gizmos.DrawSphere(character.GetCenterOfMass(), 0.1f);
-        if (selection.Chain.Any() == true)
+        Gizmos.DrawSphere(character.GetCenterOfMass(), 0.5f);
+        if (selection.ChainSelected.Any() == true)
         {
-            foreach (TreeNode<CharacterNode> node in selection.Chain)
+            foreach (TreeNode<CharacterNode> node in selection.ChainSelected)
             {
                 Vector3 pivotPointWorld = node.Data.Transform.TransformPoint(node.Data.Joint.anchor);
                 Gizmos.color = gizmoColor;

@@ -20,7 +20,7 @@ public class _Camera : MonoBehaviour
     private void Start()
     {
         _Input.OnKeyCameraMode += UpdateCameraMode;
-        character = FindObjectOfType<Character_Installer>().CurrentCharacter;
+        character = FindObjectOfType<Player_Character>().PlayerCharacter;
     }
     private void OnDisable() { _Input.OnKeyCameraMode -= UpdateCameraMode; }
 

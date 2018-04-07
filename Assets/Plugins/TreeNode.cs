@@ -21,6 +21,7 @@ public class TreeNode<T>
         _level = _parent != null ? _parent.Level + 1 : 0;
     }
 
+    public int Index { get; private set; }
     public int Level { get { return _level; } }
     public int Count { get { return _children.Count; } }
     public bool IsRoot { get { return _parent == null; } }
@@ -32,6 +33,11 @@ public class TreeNode<T>
     public TreeNode<T> this[int key]
     {
         get { return _children[key]; }
+    }
+
+    public void SetIndex(int index)
+    {
+        Index = index;
     }
 
     public void Clear()

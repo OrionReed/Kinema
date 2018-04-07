@@ -3,6 +3,7 @@ using System;
 
 public class CharacterNode : IKeyframeNode
 {
+    public int Index { get; private set; }
     public Character Character { get; private set; }
     public float Spring { get; private set; }
     public float Damper { get; private set; }
@@ -15,9 +16,9 @@ public class CharacterNode : IKeyframeNode
     public Renderer Renderer { get; private set; }
     public ConfigurableJoint Joint { get; private set; }
     public float Damage { get; private set; } = 0;
-    public bool Selected = false;
 
-    public void SetDamage(float damage) { this.Damage = damage; }
+    public void SetDamage(float damage) { Damage = damage; }
+    public void SetIndex(int index) { Index = index; }
 
     public void Init(Character Character, float Spring, float Damper, float MaxImpactForce, int CoordX, int CoordY, Transform Transform)
     {
@@ -35,13 +36,13 @@ public class CharacterNode : IKeyframeNode
             Joint = this.Transform.GetComponent<ConfigurableJoint>();
     }
 
-    public KeyframeNode GetNodeKeyframe()
+    public CharacterKeyframeNode GetNodeKeyframe()
     {
-        KeyframeNode keyframeNode = new KeyframeNode(Vector3.zero, Transform.position, Transform.rotation);
+        CharacterKeyframeNode keyframeNode = new CharacterKeyframeNode(Vector3.zero, Transform.position, Transform.rotation);
         return keyframeNode;
     }
 
-    public void SetNodeKeyframe(KeyframeNode keyframeNode)
+    public void SetNodeKeyframe(CharacterKeyframeNode keyframeNode)
     {
         Transform.position = keyframeNode.Position;
         Transform.rotation = keyframeNode.Rotation;

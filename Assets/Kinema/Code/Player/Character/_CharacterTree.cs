@@ -4,7 +4,7 @@ using UnityEngine;
 public class _CharacterTree<T> where T : new()
 {
     public TreeNode<T> Root { get; private set; }
-    public List<TreeNode<T>> NodeList { get; private set; }
+    public List<TreeNode<T>> NodeList { get; private set; } = new List<TreeNode<T>>();
 
     public T Head { get; private set; } = new T();
     public T Chest { get; private set; } = new T();
@@ -48,9 +48,13 @@ public class _CharacterTree<T> where T : new()
         c.AddChild(UpperArmLeft).AddChild(LowerArmLeft).AddChild(HandLeft);
         c.AddChild(UpperArmRight).AddChild(LowerArmRight).AddChild(HandRight);
 
-        NodeList = new List<TreeNode<T>>();
         NodeList.Add(Root);
         NodeList.AddRange(_CharacterTree<T>.GetChildren(Root));
+
+        for (int i = 0; i < NodeList.Count; i++)
+        {
+            NodeList[i].SetIndex(i);
+        }
     }
 
     /// Returns an array with all subsequent children of this node, excluding this node.
@@ -67,7 +71,7 @@ public class _CharacterTree<T> where T : new()
     /// Returns opposite node on X axis (left / right)
     public TreeNode<CharacterNode> GetOpposite(TreeNode<CharacterNode> node)
     {
-        List<TreeNode<CharacterNode>> list = node.Data.Character.List;
+        List<TreeNode<CharacterNode>> list = node.Data.Character.CharacterTree.NodeList;
 
         for (int i = 0; i < list.Count; i++)
         {

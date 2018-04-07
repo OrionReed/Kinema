@@ -25,12 +25,12 @@ public class Player_Movement : MonoBehaviour
     private Character character;
     private TargetCharacter targetCharacter = new TargetCharacter();
     private Player_NodeSelection selection;
-    private Keyframe startKeyframe;
+    private CharacterKeyframe startKeyframe;
 
     private void Start()
     {
         targetCharacter.Init(targetCharacterRoot);
-        character = FindObjectOfType<Character_Installer>().CurrentCharacter;
+        character = FindObjectOfType<Player_Character>().PlayerCharacter;
         selection = GetComponent<Player_NodeSelection>();
         startKeyframe = character.GetKeyframe();
         _LevelState.OnPlay += ApplyStartKeyframe;
@@ -55,8 +55,8 @@ public class Player_Movement : MonoBehaviour
     }
     private void ThrowPlayer()
     {
-        Keyframe thrownKeyframe = character.GetKeyframe();
-        Keyframe.ModifyForce(thrownKeyframe, throwDirection, throwForce, throwRandomness);
+        CharacterKeyframe thrownKeyframe = character.GetKeyframe();
+        CharacterKeyframe.ModifyForce(thrownKeyframe, throwDirection, throwForce, throwRandomness);
         character.SetKeyframe(thrownKeyframe);
     }
 
@@ -64,7 +64,7 @@ public class Player_Movement : MonoBehaviour
     {
         if (_Input.InputCharacter)
         {
-            if (selection.Chain.Any() == true)
+            if (selection.ChainSelected.Any() == true)
                 ChainMovement();
             if (selection.ChainMirror.Any() == true)
                 MirrorMovement();
@@ -77,27 +77,27 @@ public class Player_Movement : MonoBehaviour
 
     private void TargetPlayerMovement()
     {
-        for (int i = 0; i < targetCharacter.List.Count; i++)
+        for (int i = 0; i < targetCharacter.CharacterTree.NodeList.Count; i++)
         {
-            targetCharacter.List[i].Data.Transform.gameObject.SetActive(false);
+            targetCharacter.CharacterTree.NodeList[i].Data.Transform.gameObject.SetActive(false);
         }
     }
 
     private void ChainMovement()
     {
-        for (int i = 0; i < character.List.Count; i++)
+        for (int i = 0; i < character.CharacterTree.NodeList.Count; i++)
         {
-            if (character.List[i] == selection.Chain[0])
+            if (character.CharacterTree.NodeList[i] == selection.ChainSelected[0])
             {
-                for (int j = i; j < selection.Chain.Count + i; j++)
+                for (int j = i; j < selection.ChainSelected.Count + i; j++)
                 {
-                    targetCharacter.List[j].Data.Transform.gameObject.SetActive(true);
-                    targetCharacter.List[j].Data.Transform.position =
-                        character.List[j].Data.Transform.position +
-                        character.List[j].Data.Transform.up.normalized;
+                    targetCharacter.CharacterTree.NodeList[j].Data.Transform.gameObject.SetActive(true);
+                    targetCharacter.CharacterTree.NodeList[j].Data.Transform.position =
+                        character.CharacterTree.NodeList[j].Data.Transform.position +
+                        character.CharacterTree.NodeList[j].Data.Transform.up.normalized;
 
-                    targetCharacter.List[j].Data.Transform.rotation =
-                        character.List[j].Data.Transform.rotation;
+                    targetCharacter.CharacterTree.NodeList[j].Data.Transform.rotation =
+                        character.CharacterTree.NodeList[j].Data.Transform.rotation;
                 }
                 return;
             }
