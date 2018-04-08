@@ -4,28 +4,31 @@ using System.Collections.Generic;
 
 public class Player_Color : MonoBehaviour
 {
+    [Header("Selection")]
     [SerializeField]
-    private Color colorNone = Color.white;
+    private Color colorDeselected = Color.white;
     [SerializeField]
-    private Color colorRoot = Color.white;
+    private Gradient gradientSelected;
     [SerializeField]
-    private Color colorChild = Color.white;
+    private Gradient gradientMirror;
     [SerializeField]
-    private Color colorRootFollow = Color.white;
+    private Gradient gradientFollow;
     [SerializeField]
-    private Color colorChildFollow = Color.white;
+    private float selectionLerpTime = 0.1f;
+
+    [Header("Damage")]
     [SerializeField]
-    private Color colorHurt = Color.red;
+    private Gradient gradientDamage;
     [SerializeField]
-    private float colorLerpTime = 0.1f;
+    private float damageMinVisible = 3f;
     [SerializeField]
-    private float pulseFadeIn = 0.05f;
+    private float damageFadeIn = 0.05f;
     [SerializeField]
-    private float pulseWait = 0.1f;
+    private float damageWait = 0.1f;
     [SerializeField]
-    private float pulseFadeOut = 0.9f;
+    private float damageFadeOut = 0.9f;
     [SerializeField]
-    private Material playerMaterial;
+    private float damageIntensity = 2f;
 
     private Character playerCharacter;
     private Player_NodeSelection selection;
@@ -33,60 +36,60 @@ public class Player_Color : MonoBehaviour
     private void Start()
     {
         _LevelState.OnPlay += UpdateSelectionColor;
-        GetComponent<Player_Health>().OnNodeDamaged += UpdateHealthColor;
+        GetComponent<PlayerHealth_Damage>().OnNodeDamaged += UpdateDamageColor;
         GetComponent<Player_NodeSelection>().OnNodeSelection += UpdateSelectionColor;
         selection = FindObjectOfType<Player_NodeSelection>();
         playerCharacter = FindObjectOfType<Player_Character>().PlayerCharacter;
-        playerMaterial.EnableKeyword("_EMISSION");
+        foreach (TreeNode<CharacterNode> node in playerCharacter.CharacterTree.NodeList)
+        {
+            node.Data.Renderer.material.EnableKeyword("_EMISSION");
+            node.Data.Renderer.material.SetColor("_EmissionColor", Color.clear);
+        }
     }
 
-    private void UpdateHealthColor(CharacterNode node)
+    private void UpdateDamageColor(CharacterNode node)
     {
-        IEnumerator coroutine = PulseToColorHDR(
-            pulseFadeIn, pulseWait, pulseFadeOut,
-            colorHurt,
-            2,
-            node.Renderer.material);
-        StartCoroutine(coroutine);
+        if (node.DamageCurrent > damageMinVisible)
+        {
+            StartCoroutine(PulseDamageColor(node));
+        }
     }
 
     private void UpdateSelectionColor()
     {
-        Color selectionColor = Color.magenta;
         foreach (TreeNode<CharacterNode> node in playerCharacter.CharacterTree.NodeList)
         {
-            selectionColor = colorNone;
-            IEnumerator coroutine = LerpToColor(colorLerpTime, selectionColor, node.Data.Renderer.material);
+            IEnumerator coroutine = LerpSelectionColor(selectionLerpTime, colorDeselected, node.Data.Renderer.material);
             StartCoroutine(coroutine);
         }
 
         for (int i = 0; i < selection.ChainSelected.Count; i++)
         {
-            IEnumerator coroutine = LerpToColor(
-                colorLerpTime,
-                selectionColor = i == 0 ? colorRoot : colorChild,
+            IEnumerator coroutine = LerpSelectionColor(
+                selectionLerpTime,
+                gradientSelected.Evaluate(i == 0 ? 0 : 0.5f),
                 selection.ChainSelected[i].Data.Renderer.material);
             StartCoroutine(coroutine);
         }
         for (int i = 0; i < selection.ChainFollow.Count; i++)
         {
-            IEnumerator coroutine = LerpToColor(
-                colorLerpTime,
-                selectionColor = i == 0 ? colorRootFollow : colorChildFollow,
+            IEnumerator coroutine = LerpSelectionColor(
+                selectionLerpTime,
+                gradientFollow.Evaluate(i == 0 ? 0 : 0.5f),
                 selection.ChainFollow[i].Data.Renderer.material);
             StartCoroutine(coroutine);
         }
         for (int i = 0; i < selection.ChainMirror.Count; i++)
         {
-            IEnumerator coroutine = LerpToColor(
-                colorLerpTime,
-                selectionColor = i == 0 ? colorRoot : colorChild,
+            IEnumerator coroutine = LerpSelectionColor(
+                selectionLerpTime,
+                gradientMirror.Evaluate(i == 0 ? 0 : 0.5f),
                 selection.ChainMirror[i].Data.Renderer.material);
             StartCoroutine(coroutine);
         }
     }
 
-    private IEnumerator LerpToColor(float timeForEffect, Color endColor, Material materialInstance)
+    private IEnumerator LerpSelectionColor(float timeForEffect, Color endColor, Material materialInstance)
     {
         Color startColor = materialInstance.color;
         float elapsed = 0f;
@@ -100,25 +103,38 @@ public class Player_Color : MonoBehaviour
 
         materialInstance.color = endColor;
     }
-    private IEnumerator PulseToColorHDR(float fadeIn, float wait, float fadeOut, Color pulseToColor, float intensity, Material materialInstance)
+    private IEnumerator PulseDamageColor(CharacterNode node)
     {
-        Color startColor = materialInstance.color;
-        Vector4 HDRColor = pulseToColor * 2;
         float stageElapsed = 0;
 
-        while (stageElapsed < fadeIn)
+        Color startColor = node.Renderer.material.GetColor("_EmissionColor");
+        if (startColor == Color.clear)
         {
-            materialInstance.SetColor("_EmissionColor", Color.Lerp(startColor, HDRColor, stageElapsed / fadeIn));
-            stageElapsed += Time.deltaTime / Time.timeScale;
-            yield return null;
+            Color colorDamage = gradientDamage.Evaluate(node.DamageCurrent / node.DamageMax) * damageIntensity;
+            while (stageElapsed < damageFadeIn)
+            {
+                node.Renderer.material.SetColor(
+                    "_EmissionColor",
+                    Color.Lerp(Color.clear, colorDamage, stageElapsed / damageFadeIn));
+
+                stageElapsed += Time.deltaTime / Time.timeScale;
+                yield return null;
+            }
         }
+
+        yield return new WaitForSeconds(damageWait);
         stageElapsed = 0;
-        yield return new WaitForSeconds(wait);
-        while (stageElapsed < fadeIn)
+
+        Color currentColor = node.Renderer.material.GetColor("_EmissionColor");
+        while (stageElapsed < damageFadeOut)
         {
-            materialInstance.SetColor("_EmissionColor", Color.Lerp(HDRColor, startColor, stageElapsed / fadeIn));
+            node.Renderer.material.SetColor(
+                "_EmissionColor",
+                Color.Lerp(currentColor, Color.clear, stageElapsed / damageFadeOut));
+
             stageElapsed += Time.deltaTime / Time.timeScale;
             yield return null;
         }
+        node.Renderer.material.SetColor("_EmissionColor", Color.clear);
     }
 }

@@ -3,18 +3,10 @@ using System.Linq;
 
 public class Player_Gizmos : MonoBehaviour
 {
-    [SerializeField]
-    private Transform ghostRoot;
-
     private Character character;
-    private TargetCharacter ghostCharacter = new TargetCharacter();
     private Player_NodeSelection selection;
     private Color gizmoColor = Color.blue;
 
-    private void Awake()
-    {
-        ghostCharacter.Init(ghostRoot);
-    }
     private void Start()
     {
         selection = FindObjectOfType<Player_NodeSelection>();
@@ -56,32 +48,6 @@ public class Player_Gizmos : MonoBehaviour
     }
     private void DrawGhost()
     {
-        /*
-        for (int i = 0; i < selection.nodeList.Count; i++)
-        {
-            if (selection.nodeList[i].Parent != null)
-            {
-                Quaternion rootTargetRotation = 
-                    Quaternion.Inverse(ghostCharacter.nodeList[i].Parent.Data.transform.rotation) * 
-                    ghostCharacter.nodeList[i].Data.transform.rotation * 
-                    _Input.inputRotation;
 
-                ghostCharacter.nodeList[i].Data.renderer.material.color =
-                    selection.nodeList[i].Data.selectionState == NodeSelectionState.None ?
-                    Color.clear : ghostColor;
-
-                ghostCharacter.nodeList[i].Data.transform.position = character.nodeList[i].Data.transform.position;
-                ghostCharacter.nodeList[i].Data.transform.rotation = character.nodeList[i].Data.transform.rotation;
-
-                ghostCharacter.nodeList[i].Data.transform.rotation = rootTargetRotation;
-                ghostCharacter.nodeList[i].Data.transform.position = ghostCharacter.GetNode(i).transform.TransformPoint(character.nodeList[i].Data.joint.anchor);
-                ghostCharacter.nodeList[i].Data.transform.Translate(Vector3.up * Vector3.Distance(
-                                                ghostCharacter.nodeList[i].Data.transform.TransformPoint(character.nodeList[i].Data.joint.anchor),
-                                                ghostCharacter.nodeList[i].Data.transform.position
-                                                ),
-                                                Space.Self);
-            }
-        }
-        */
     }
 }

@@ -386,8 +386,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneIndex: 0
   avaiableScenes:
-  - sceneAsset: {fileID: 102900000, guid: c1f03b79ca57a4398956a43e4c0664a6, type: 3}
-    sceneName: Kinema/Scenes/Level_Skyscraper
+  - sceneAsset: {fileID: 102900000, guid: 85ccaa580c8cf45259849e91def2d3c3, type: 3}
+    sceneName: Kinema/Scenes/Level_Debug
 --- !u!4 &1050089161
 Transform:
   m_ObjectHideFlags: 0

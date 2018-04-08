@@ -11,3 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Kinema/Scenes/Level_Skyscraper.unity
     guid: c1f03b79ca57a4398956a43e4c0664a6
+  - enabled: 1
+    path: Assets/Kinema/Scenes/Level_Debug.unity
+    guid: 85ccaa580c8cf45259849e91def2d3c3

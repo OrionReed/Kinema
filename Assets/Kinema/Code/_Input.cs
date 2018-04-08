@@ -24,7 +24,7 @@ public class _Input : MonoBehaviour
 
     /// Inputting character movement?
     public static bool InputCharacter { get; private set; }
-    /// Change selection mode
+    /// Rotation input for character nodes
     public static Quaternion InputCharacterRotation { get; private set; }
     /// Controlling the main camera?
     public static bool ControlCamera { get; private set; }

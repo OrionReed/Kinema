@@ -37,7 +37,7 @@ public class _LevelState : MonoBehaviour
     private void Start()
     {
         _Input.OnKeyResetScene += StatePlay;
-        FindObjectOfType<Player_Health>().OnPlayerDeath += StateDead;
+        FindObjectOfType<PlayerHealth_Death>().OnPlayerDeath += StateDead;
 
         StateIntro();
     }

@@ -15,6 +15,7 @@ MonoBehaviour:
   - pbGenerateUV2PerObject
   - pbUVMaterialPreview
   - pbDisableAutoUV2Generation
+  - pbDragSelectWholeElement
   m_Int_keys:
   - pbDefaultEditLevel
   - pbHandleAlignment
@@ -30,7 +31,7 @@ MonoBehaviour:
   - pbCurrentMaterialPalette
   m_Color_keys: []
   m_Material_keys: []
-  m_Bool_values: 000100
+  m_Bool_values: 00010001
   m_Int_values: 0000000000000000020000000100000001000000
   m_Float_values:
   - 0

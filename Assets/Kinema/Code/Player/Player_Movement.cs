@@ -10,38 +10,40 @@ public class Player_Movement : MonoBehaviour
     public ForceModeEnum ForceMode { get; private set; }
 
     [SerializeField]
-    private Transform targetCharacterRoot;
-    [SerializeField]
-    private Material ghostMaterial;
-    [SerializeField]
-    private Color ghostColor;
-    [SerializeField]
     private Vector3 throwDirection;
     [SerializeField]
     private float throwForce;
     [SerializeField]
     private float throwRandomness;
+    [SerializeField]
+    private float jointSpring;
+    [SerializeField]
+    private float activeDamper;
+    [SerializeField]
+    private float inactiveDamper;
 
     private Character character;
-    private TargetCharacter targetCharacter = new TargetCharacter();
     private Player_NodeSelection selection;
     private CharacterKeyframe startKeyframe;
 
     private void Start()
     {
-        targetCharacter.Init(targetCharacterRoot);
         character = FindObjectOfType<Player_Character>().PlayerCharacter;
         selection = GetComponent<Player_NodeSelection>();
         startKeyframe = character.GetKeyframe();
+        _LevelState.OnPlay += SetTargetToCurrent;
         _LevelState.OnPlay += ApplyStartKeyframe;
         _Input.OnKeyForceMode += UpdateForceMode;
         _Input.OnKeyThrow += ThrowPlayer;
+        selection.OnNodeSelection += SetNodeDrive;
     }
     private void OnDisable()
     {
+        _LevelState.OnPlay -= SetTargetToCurrent;
         _Input.OnKeyForceMode -= UpdateForceMode;
         _LevelState.OnPlay -= ApplyStartKeyframe;
         _Input.OnKeyThrow -= ThrowPlayer;
+        selection.OnNodeSelection -= SetNodeDrive;
     }
 
     private void UpdateForceMode()
@@ -56,7 +58,7 @@ public class Player_Movement : MonoBehaviour
     private void ThrowPlayer()
     {
         CharacterKeyframe thrownKeyframe = character.GetKeyframe();
-        CharacterKeyframe.ModifyForce(thrownKeyframe, throwDirection, throwForce, throwRandomness);
+        CharacterKeyframe.AddForce(thrownKeyframe, throwDirection, throwForce, throwRandomness);
         character.SetKeyframe(thrownKeyframe);
     }
 
@@ -72,43 +74,61 @@ public class Player_Movement : MonoBehaviour
                 FollowMovement();
         }
         else
-            TargetPlayerMovement();
-    }
-
-    private void TargetPlayerMovement()
-    {
-        for (int i = 0; i < targetCharacter.CharacterTree.NodeList.Count; i++)
         {
-            targetCharacter.CharacterTree.NodeList[i].Data.Transform.gameObject.SetActive(false);
+            // Behaviour when no input is applied
         }
     }
 
     private void ChainMovement()
     {
-        for (int i = 0; i < character.CharacterTree.NodeList.Count; i++)
+        List<TreeNode<CharacterNode>> chain = selection.ChainSelected;
+        for (int i = 0; i < selection.ChainSelected.Count; i++)
         {
-            if (character.CharacterTree.NodeList[i] == selection.ChainSelected[0])
-            {
-                for (int j = i; j < selection.ChainSelected.Count + i; j++)
-                {
-                    targetCharacter.CharacterTree.NodeList[j].Data.Transform.gameObject.SetActive(true);
-                    targetCharacter.CharacterTree.NodeList[j].Data.Transform.position =
-                        character.CharacterTree.NodeList[j].Data.Transform.position +
-                        character.CharacterTree.NodeList[j].Data.Transform.up.normalized;
-
-                    targetCharacter.CharacterTree.NodeList[j].Data.Transform.rotation =
-                        character.CharacterTree.NodeList[j].Data.Transform.rotation;
-                }
-                return;
-            }
+            chain[i].Data.Joint.SetTargetRotationLocal(
+                chain[i].Data.Transform.rotation *
+                _Input.InputCharacterRotation,
+                chain[i].Data.OriginalRotation);
         }
     }
     private void MirrorMovement()
     {
+        List<TreeNode<CharacterNode>> chainSelected = selection.ChainMirror;
+        List<TreeNode<CharacterNode>> chainMirror = selection.ChainMirror;
+        for (int i = 0; i < selection.ChainMirror.Count; i++)
+        {
+            chainMirror[i].Data.Joint.SetTargetRotationLocal(
+                chainSelected[i].Data.Joint.targetRotation,
+                chainMirror[i].Data.OriginalRotation);
+        }
 
     }
     private void FollowMovement()
     {
 
+    }
+
+    private void SetNodeDrive()
+    {
+        JointDrive drive = new JointDrive();
+        drive.maximumForce = Mathf.Infinity;
+        drive.positionDamper = inactiveDamper;
+
+        foreach (TreeNode<CharacterNode> node in selection.AllDeselected)
+            if (node.IsRoot == false) node.Data.Joint.slerpDrive = drive;
+
+        drive.positionDamper = activeDamper;
+        drive.positionSpring = jointSpring;
+
+        foreach (TreeNode<CharacterNode> node in selection.ChainSelected)
+            if (node.IsRoot == false) node.Data.Joint.slerpDrive = drive;
+        foreach (TreeNode<CharacterNode> node in selection.ChainMirror)
+            if (node.IsRoot == false) node.Data.Joint.slerpDrive = drive;
+        foreach (TreeNode<CharacterNode> node in selection.ChainFollow)
+            if (node.IsRoot == false) node.Data.Joint.slerpDrive = drive;
+    }
+    private void SetTargetToCurrent()
+    {
+        foreach (TreeNode<CharacterNode> node in character.CharacterTree.NodeList)
+            if (node.IsRoot == false) node.Data.Joint.SetTargetRotationLocal(node.Data.Transform.rotation, node.Data.OriginalRotation);
     }
 }

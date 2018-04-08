@@ -11,7 +11,7 @@ public class Player_NodeSelection : MonoBehaviour
     public List<TreeNode<CharacterNode>> ChainSelected { get; private set; } = new List<TreeNode<CharacterNode>>();
     public List<TreeNode<CharacterNode>> ChainMirror { get; private set; } = new List<TreeNode<CharacterNode>>();
     public List<TreeNode<CharacterNode>> ChainFollow { get; private set; } = new List<TreeNode<CharacterNode>>();
-    public List<TreeNode<CharacterNode>> AllSelected { get; private set; } = new List<TreeNode<CharacterNode>>();
+    public List<TreeNode<CharacterNode>> AllDeselected { get; private set; } = new List<TreeNode<CharacterNode>>();
     public enum SelectionModeEnum { None, Chain, Mirror, Follow, MAX };
     public SelectionModeEnum SelectionMode;
 
@@ -22,11 +22,13 @@ public class Player_NodeSelection : MonoBehaviour
         character = FindObjectOfType<Player_Character>().PlayerCharacter;
         _Input.OnKeySelectionMode += UpdateSelectionMode;
         _Input.OnClickSelect += SelectObject;
+        _LevelState.OnPlay += ClearSelection;
     }
     private void OnDisable()
     {
         _Input.OnKeySelectionMode -= UpdateSelectionMode;
         _Input.OnClickSelect -= SelectObject;
+        _LevelState.OnPlay -= ClearSelection;
     }
     private void UpdateSelectionMode()
     {
@@ -37,12 +39,12 @@ public class Player_NodeSelection : MonoBehaviour
     {
         if (ChainSelected.Count > 0 && node == ChainSelected[0])
         {
-            DeselectAll();
+            ClearSelection();
             OnNodeSelection();
             return;
         }
 
-        DeselectAll();
+        ClearSelection();
         TreeNode<CharacterNode> oppositeNode = character.CharacterTree.GetOpposite(node);
         ChainSelected.Add(node);
         switch (SelectionMode)
@@ -64,10 +66,13 @@ public class Player_NodeSelection : MonoBehaviour
                 break;
 
         }
-        AllSelected.Clear();
-        AllSelected.AddRange(ChainSelected);
-        AllSelected.AddRange(ChainMirror);
-        AllSelected.AddRange(ChainFollow);
+        AllDeselected = new List<TreeNode<CharacterNode>>(character.CharacterTree.NodeList);
+        foreach (TreeNode<CharacterNode> n in ChainSelected)
+            AllDeselected.Remove(n);
+        foreach (TreeNode<CharacterNode> n in ChainMirror)
+            AllDeselected.Remove(n);
+        foreach (TreeNode<CharacterNode> n in ChainFollow)
+            AllDeselected.Remove(n);
         OnNodeSelection();
     }
 
@@ -80,12 +85,12 @@ public class Player_NodeSelection : MonoBehaviour
             UpdateSelection(character.ContainsTransform(hit.transform));
     }
 
-    private void DeselectAll()
+    public void ClearSelection()
     {
-        AllSelected.Clear();
         ChainSelected.Clear();
         ChainMirror.Clear();
         ChainFollow.Clear();
+        AllDeselected = character.CharacterTree.NodeList;
         OnNodeSelection();
     }
 }

@@ -29,7 +29,7 @@ public class _Camera : MonoBehaviour
         CameraMode += 1; if (CameraMode == CameraModeEnum.MAX) CameraMode = 0; OnModeUpdate();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Vector3 target = character.GetCenterOfMass();
         switch (CameraMode)
@@ -37,6 +37,14 @@ public class _Camera : MonoBehaviour
             case CameraModeEnum.Follow:
                 modeFollow.ControlCamera(this, target, _Input.ControlCamera);
                 break;
+        }
+    }
+
+    private void Update()
+    {
+        Vector3 target = character.GetCenterOfMass();
+        switch (CameraMode)
+        {
             case CameraModeEnum.Fixed:
                 modeFixed.ControlCamera(this, target, _Input.ControlCamera);
                 break;
