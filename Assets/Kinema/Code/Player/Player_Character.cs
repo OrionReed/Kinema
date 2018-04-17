@@ -6,11 +6,10 @@ public class Player_Character : MonoBehaviour
 
     [SerializeField]
     private Transform characterRoot;
-    [SerializeField]
-    private Character character;
+
     private void Awake()
     {
-        PlayerCharacter = character;
+        PlayerCharacter = new Character();
         PlayerCharacter.Init(characterRoot);
         foreach (TreeNode<CharacterNode> node in PlayerCharacter.CharacterTree.NodeList)
             node.Data.Transform.gameObject.AddComponent<Node_Collision>().Node = node;

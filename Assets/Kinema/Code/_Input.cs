@@ -22,6 +22,8 @@ public class _Input : MonoBehaviour
     /// Throw character
     public static event Action OnKeyThrow = delegate { };
 
+    /// Is keyboard input allowed?
+    public static bool ConsoleInput = false;
     /// Inputting character movement?
     public static bool InputCharacter { get; private set; }
     /// Rotation input for character nodes
@@ -37,24 +39,15 @@ public class _Input : MonoBehaviour
     /// Direction of mouse movement
     public static Vector2 MouseAxis { get; private set; }
 
-    [SerializeField]
-    private KeyCode selectionMode;
-    [SerializeField]
-    private KeyCode forceMode;
-    [SerializeField]
-    private KeyCode cameraMode;
-    [SerializeField]
-    private KeyCode resetScene;
-    [SerializeField]
-    private KeyCode letterbox;
-    [SerializeField]
-    private KeyCode fastCamera;
-    [SerializeField]
-    private KeyCode timeSpeedUp;
-    [SerializeField]
-    private KeyCode timeSpeedDown;
-    [SerializeField]
-    private KeyCode throwPlayer;
+    [SerializeField] private KeyCode selectionMode;
+    [SerializeField] private KeyCode forceMode;
+    [SerializeField] private KeyCode cameraMode;
+    [SerializeField] private KeyCode resetScene;
+    [SerializeField] private KeyCode letterbox;
+    [SerializeField] private KeyCode fastCamera;
+    [SerializeField] private KeyCode timeSpeedUp;
+    [SerializeField] private KeyCode timeSpeedDown;
+    [SerializeField] private KeyCode throwPlayer;
 
     private void Awake()
     {
@@ -67,21 +60,24 @@ public class _Input : MonoBehaviour
 
     private void Update()
     {
-        if (_LevelState.CurrentState != _LevelState.States.Dead)
+        if (!ConsoleInput)
         {
-            if (Input.GetKeyDown(selectionMode)) OnKeySelectionMode();
-            if (Input.GetKeyDown(forceMode)) OnKeyForceMode();
-            if (Input.GetKeyDown(letterbox)) OnKeyLetterbox();
-            if (Input.GetKeyDown(throwPlayer)) OnKeyThrow();
-            if (InputCharacterRotation != Quaternion.identity) InputCharacter = true; else InputCharacter = false;
+            if (_LevelState.CurrentState != LevelState.Dead)
+            {
+                if (Input.GetKeyDown(selectionMode)) OnKeySelectionMode();
+                if (Input.GetKeyDown(forceMode)) OnKeyForceMode();
+                if (Input.GetKeyDown(letterbox)) OnKeyLetterbox();
+                if (Input.GetKeyDown(throwPlayer)) OnKeyThrow();
+                if (InputCharacterRotation != Quaternion.identity) InputCharacter = true; else InputCharacter = false;
+            }
+            if (Input.GetKeyDown(cameraMode)) OnKeyCameraMode();
+            if (Input.GetKeyDown(resetScene)) OnKeyResetScene();
+            if (Input.GetKeyDown(timeSpeedUp)) OnKeyTimeSpeedUp();
+            if (Input.GetKeyDown(timeSpeedDown)) OnKeyTimeSpeedDown();
+            if (Input.GetMouseButtonDown(0)) OnClickSelect();
         }
         InputCameraDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         CameraOrbitDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        if (Input.GetKeyDown(cameraMode)) OnKeyCameraMode();
-        if (Input.GetKeyDown(resetScene)) OnKeyResetScene();
-        if (Input.GetKeyDown(timeSpeedUp)) OnKeyTimeSpeedUp();
-        if (Input.GetKeyDown(timeSpeedDown)) OnKeyTimeSpeedDown();
-        if (Input.GetMouseButtonDown(0)) OnClickSelect();
 
         if (Input.GetMouseButton(1)) ControlCamera = true; else ControlCamera = false;
         if (Input.GetKey(fastCamera)) FastCamera = true; else FastCamera = false;

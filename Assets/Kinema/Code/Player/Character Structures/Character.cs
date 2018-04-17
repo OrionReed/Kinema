@@ -1,35 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
+﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Kinema/New Character")]
-[Serializable]
-public class Character : ScriptableObject
+public class Character
 {
     public _CharacterTree<CharacterNode> CharacterTree { get; private set; } = new _CharacterTree<CharacterNode>();
 
     public void Init(Transform rootTransform)
     {
-        CharacterTree.Head.Init(this, 20, 0, 1, rootTransform.Find(CharacterTree.StringHead));
-        CharacterTree.Chest.Init(this, 25, 0, 1, rootTransform.Find(CharacterTree.StringChest));
-        CharacterTree.Stomach.Init(this, 50, 0, 0, rootTransform.Find(CharacterTree.StringStomach));
+        CharacterTree.Head.Init(this, 20, 0, 1, Vector3.left, Vector3.up, rootTransform.Find(CharacterTree.StringHead));
+        CharacterTree.Chest.Init(this, 25, 0, 1, Vector3.left, Vector3.up, rootTransform.Find(CharacterTree.StringChest));
+        CharacterTree.Stomach.Init(this, 50, 0, 0, Vector3.left, Vector3.up, rootTransform.Find(CharacterTree.StringStomach));
 
-        CharacterTree.UpperArmLeft.Init(this, 50, -1, 1, rootTransform.Find(CharacterTree.StringUpperArmLeft));
-        CharacterTree.LowerArmLeft.Init(this, 50, -1, 1, rootTransform.Find(CharacterTree.StringLowerArmLeft));
-        CharacterTree.HandLeft.Init(this, 50, -1, 1, rootTransform.Find(CharacterTree.StringHandLeft));
+        CharacterTree.UpperArmLeft.Init(this, 50, -1, 1, Vector3.down, Vector3.left, rootTransform.Find(CharacterTree.StringUpperArmLeft));
+        CharacterTree.LowerArmLeft.Init(this, 50, -1, 1, Vector3.up, Vector3.up, rootTransform.Find(CharacterTree.StringLowerArmLeft));
+        CharacterTree.HandLeft.Init(this, 50, -1, 1, Vector3.down, Vector3.left, rootTransform.Find(CharacterTree.StringHandLeft));
 
-        CharacterTree.UpperArmRight.Init(this, 50, 1, 1, rootTransform.Find(CharacterTree.StringUpperArmRight));
-        CharacterTree.LowerArmRight.Init(this, 50, 1, 1, rootTransform.Find(CharacterTree.StringLowerArmRight));
-        CharacterTree.HandRight.Init(this, 50, 1, 1, rootTransform.Find(CharacterTree.StringHandRight));
+        CharacterTree.UpperArmRight.Init(this, 50, 1, 1, Vector3.down, Vector3.left, rootTransform.Find(CharacterTree.StringUpperArmRight));
+        CharacterTree.LowerArmRight.Init(this, 50, 1, 1, Vector3.down, Vector3.up, rootTransform.Find(CharacterTree.StringLowerArmRight));
+        CharacterTree.HandRight.Init(this, 50, 1, 1, Vector3.down, Vector3.left, rootTransform.Find(CharacterTree.StringHandRight));
 
-        CharacterTree.UpperLegLeft.Init(this, 50, -1, -1, rootTransform.Find(CharacterTree.StringUpperLegLeft));
-        CharacterTree.LowerLegLeft.Init(this, 50, -1, -1, rootTransform.Find(CharacterTree.StringLowerLegLeft));
-        CharacterTree.FootLeft.Init(this, 50, -1, -1, rootTransform.Find(CharacterTree.StringFootLeft));
+        CharacterTree.UpperLegLeft.Init(this, 50, -1, -1, Vector3.right, Vector3.up, rootTransform.Find(CharacterTree.StringUpperLegLeft));
+        CharacterTree.LowerLegLeft.Init(this, 50, -1, -1, Vector3.right, Vector3.up, rootTransform.Find(CharacterTree.StringLowerLegLeft));
+        CharacterTree.FootLeft.Init(this, 50, -1, -1, Vector3.right, Vector3.up, rootTransform.Find(CharacterTree.StringFootLeft));
 
-        CharacterTree.UpperLegRight.Init(this, 50, 1, -1, rootTransform.Find(CharacterTree.StringUpperLegRight));
-        CharacterTree.LowerLegRight.Init(this, 50, 1, -1, rootTransform.Find(CharacterTree.StringLowerLegRight));
-        CharacterTree.FootRight.Init(this, 50, 1, -1, rootTransform.Find(CharacterTree.StringFootRight));
+        CharacterTree.UpperLegRight.Init(this, 50, 1, -1, Vector3.right, Vector3.up, rootTransform.Find(CharacterTree.StringUpperLegRight));
+        CharacterTree.LowerLegRight.Init(this, 50, 1, -1, Vector3.right, Vector3.up, rootTransform.Find(CharacterTree.StringLowerLegRight));
+        CharacterTree.FootRight.Init(this, 50, 1, -1, Vector3.right, Vector3.up, rootTransform.Find(CharacterTree.StringFootRight));
 
         for (int i = 0; i < CharacterTree.NodeList.Count; i++)
         {
@@ -37,6 +32,8 @@ public class Character : ScriptableObject
             {
                 CharacterNode root = CharacterTree.NodeList[i].Data;
                 CharacterNode parent = CharacterTree.NodeList[i].Parent.Data;
+                root.Joint.axis = root.ControlAxisPrimary;
+                root.Joint.secondaryAxis = root.ControlAxisSecondary;
                 root.Joint.connectedBody = parent.Rigidbody;
                 JointDrive d = new JointDrive();
                 d.positionSpring = root.Spring;

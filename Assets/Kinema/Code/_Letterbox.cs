@@ -21,7 +21,7 @@ public class _Letterbox : MonoBehaviour
     }
     private void ToggleLetterbox()
     {
-        if (_LevelState.CurrentState != _LevelState.States.Dead)
+        if (_LevelState.CurrentState != LevelState.Dead)
         {
             float screenAspect = (float)Screen.width / (float)Screen.height;
             float aspectHeight = screenAspect / letterboxAspect;

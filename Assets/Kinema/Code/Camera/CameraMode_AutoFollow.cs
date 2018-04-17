@@ -24,9 +24,9 @@ public class CameraMode_AutoFollow : ScriptableObject, ICameraMode
 
 
 
-    public void ControlCamera(_Camera camera, Vector3 target, bool controlCamera)
+    public void ControlCamera(_Camera camera, Vector3 target)
     {
-        if (controlCamera)
+        if (_Input.ControlCamera)
             RotateAroundTarget(camera, _Input.CameraOrbitDirection, target);
         SlerpToRelativeHeight(camera, target);
         SlerpMoveTowards(camera, target);

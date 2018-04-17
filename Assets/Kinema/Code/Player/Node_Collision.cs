@@ -10,6 +10,7 @@ public class Node_Collision : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        OnCollision(other, Node);
+        if (other.collider.tag != "Player")
+            OnCollision(other, Node);
     }
 }

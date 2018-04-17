@@ -35,7 +35,7 @@ public class _Camera : MonoBehaviour
         switch (CameraMode)
         {
             case CameraModeEnum.Follow:
-                modeFollow.ControlCamera(this, target, _Input.ControlCamera);
+                modeFollow.ControlCamera(this, target);
                 break;
         }
     }
@@ -46,10 +46,10 @@ public class _Camera : MonoBehaviour
         switch (CameraMode)
         {
             case CameraModeEnum.Fixed:
-                modeFixed.ControlCamera(this, target, _Input.ControlCamera);
+                modeFixed.ControlCamera(this, target);
                 break;
             case CameraModeEnum.Free:
-                modeFree.ControlCamera(this, target, _Input.ControlCamera);
+                modeFree.ControlCamera(this, target);
                 break;
         }
     }

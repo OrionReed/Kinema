@@ -26,6 +26,18 @@ public class Player_Movement : MonoBehaviour
     private Player_NodeSelection selection;
     private CharacterKeyframe startKeyframe;
 
+    public void Throw(float force)
+    {
+        throwForce = force;
+        ThrowPlayer();
+    }
+    public void Throw(float force, Vector3 direction)
+    {
+        throwDirection = direction;
+        throwForce = force;
+        ThrowPlayer();
+    }
+
     private void Start()
     {
         character = FindObjectOfType<Player_Character>().PlayerCharacter;
@@ -64,26 +76,33 @@ public class Player_Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_Input.InputCharacter)
-        {
-            if (selection.ChainSelected.Any() == true)
-                ChainMovement();
-            if (selection.ChainMirror.Any() == true)
-                MirrorMovement();
-            if (selection.ChainFollow.Any() == true)
-                FollowMovement();
-        }
-        else
-        {
-            // Behaviour when no input is applied
-        }
+        if (selection.ChainSelected.Any() == true)
+            ChainMovement();
+        if (selection.ChainMirror.Any() == true)
+            MirrorMovement();
+        if (selection.ChainFollow.Any() == true)
+            FollowMovement();
     }
 
     private void ChainMovement()
     {
+        JointDrive chainDrive = new JointDrive();
+        chainDrive.maximumForce = Mathf.Infinity;
         List<TreeNode<CharacterNode>> chain = selection.ChainSelected;
         for (int i = 0; i < selection.ChainSelected.Count; i++)
         {
+            if (_Input.InputCharacter)
+            {
+                chainDrive.positionDamper = activeDamper;
+                chainDrive.positionSpring = jointSpring;
+            }
+            else
+            {
+                chainDrive.positionDamper = inactiveDamper;
+                chainDrive.positionSpring = 0;
+            }
+
+            chain[i].Data.Joint.slerpDrive = chainDrive;
             chain[i].Data.Joint.SetTargetRotationLocal(
                 chain[i].Data.Transform.rotation *
                 _Input.InputCharacterRotation,

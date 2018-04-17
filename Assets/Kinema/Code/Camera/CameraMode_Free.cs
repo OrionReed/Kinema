@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Kinema/Free Camera")]
 public class CameraMode_Free : ScriptableObject, ICameraMode
@@ -14,27 +12,24 @@ public class CameraMode_Free : ScriptableObject, ICameraMode
 
     private float rotationX = 0f;
     private float rotationY = 0f;
+
     private bool rotationInitialized = false;
 
-    public void ControlCamera(_Camera camera, Vector3 target, bool controlCamera)
+    public void ControlCamera(_Camera camera, Vector3 target)
     {
-        if (controlCamera)
+        if (_Input.ControlCamera)
         {
-            InitializeRotation(camera);
+            if (!rotationInitialized)
+                InitializeRotation(camera);
             MoveCameraLocal(camera, target);
             RotateCamera(camera, target);
         }
-        else
-            rotationInitialized = false;
     }
     void InitializeRotation(_Camera camera)
     {
-        if (!rotationInitialized)
-        {
-            rotationX = camera.transform.rotation.eulerAngles.y;
-            rotationY = -camera.transform.rotation.eulerAngles.x;
-            rotationInitialized = true;
-        }
+        rotationX = camera.transform.rotation.eulerAngles.y;
+        rotationY = -camera.transform.rotation.eulerAngles.x;
+        rotationInitialized = true;
     }
     void MoveCameraLocal(_Camera camera, Vector3 target)
     {

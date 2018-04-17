@@ -12,6 +12,8 @@ public class CharacterNode : IKeyframeNode
     public Rigidbody Rigidbody { get; private set; }
     public Renderer Renderer { get; private set; }
     public ConfigurableJoint Joint { get; private set; }
+    public Vector3 ControlAxisPrimary { get; private set; }
+    public Vector3 ControlAxisSecondary { get; private set; }
     public float DamageMax { get; private set; }
 
     public float DamageCurrent { get; private set; }
@@ -21,18 +23,20 @@ public class CharacterNode : IKeyframeNode
     public void SetDamage(float damage) { DamageCurrent = Mathf.Clamp(damage, 0, DamageMax); }
     public void SetIndex(int index) { Index = index; }
 
-    public void Init(Character character, float damageMax, int coordX, int coordY, Transform transform)
+    public void Init(Character character, float damageMax, int coordX, int coordY, Vector3 axisPrimary, Vector3 axisSecondary, Transform transform)
     {
-        this.Character = character;
-        this.DamageMax = damageMax;
-        this.CoordX = coordX;
-        this.CoordY = coordY;
-        this.Transform = transform;
-        OriginalRotation = this.Transform.rotation;
-        Rigidbody = this.Transform.GetComponent<Rigidbody>();
-        Renderer = this.Transform.GetComponent<Renderer>();
-        if (this.Transform.GetComponent<ConfigurableJoint>() != null)
-            Joint = this.Transform.GetComponent<ConfigurableJoint>();
+        Character = character;
+        DamageMax = damageMax;
+        CoordX = coordX;
+        CoordY = coordY;
+        ControlAxisPrimary = axisPrimary;
+        ControlAxisSecondary = axisSecondary;
+        Transform = transform;
+        OriginalRotation = Transform.rotation;
+        Rigidbody = Transform.GetComponent<Rigidbody>();
+        Renderer = Transform.GetComponent<Renderer>();
+        if (Transform.GetComponent<ConfigurableJoint>() != null)
+            Joint = Transform.GetComponent<ConfigurableJoint>();
     }
 
     public CharacterKeyframeNode GetNodeKeyframe()
