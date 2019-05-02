@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System;
 
 namespace CmdConsole
 {
@@ -38,7 +39,7 @@ namespace CmdConsole
                 log = new ConsoleLog(logText, stylePalette);
                 log.ClearLog();
                 inputField.onValueChanged.AddListener(OnTextInputChanged);
-                inputField.onEndEdit.AddListener(OnProcessCommand);
+                inputField.onSubmit.AddListener(OnProcessCommand);
                 ConsoleCommands.RegisterCommands();
                 ConsoleCommands.SortCommands();
 
