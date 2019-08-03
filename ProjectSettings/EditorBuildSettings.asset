@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Kinema/Scenes/Menu.unity
-    guid: 32169f1eb12044ea9b58383cf39518dc
-  - enabled: 1
     path: Assets/Kinema/Scenes/Level_Skyscraper.unity
     guid: c1f03b79ca57a4398956a43e4c0664a6
   m_configObjects: {}
