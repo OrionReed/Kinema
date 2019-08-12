@@ -49,7 +49,7 @@ public class _Input : MonoBehaviour
     [SerializeField] private KeyCode timeSpeedDown;
     [SerializeField] private KeyCode throwPlayer;
 
-    private void Awake()
+    private void Awake ()
     {
         InputCameraDirection = Vector3.zero;
         InputCharacterRotation = Quaternion.identity;
@@ -58,38 +58,38 @@ public class _Input : MonoBehaviour
         FastCamera = false;
     }
 
-    private void Update()
+    private void Update ()
     {
         if (!ConsoleInput)
         {
-            if (_LevelState.CurrentState != LevelState.Dead)
-            {
-                if (Input.GetKeyDown(selectionMode)) OnKeySelectionMode();
-                if (Input.GetKeyDown(forceMode)) OnKeyForceMode();
-                if (Input.GetKeyDown(letterbox)) OnKeyLetterbox();
-                if (Input.GetKeyDown(throwPlayer)) OnKeyThrow();
-                if (InputCharacterRotation != Quaternion.identity) InputCharacter = true; else InputCharacter = false;
-            }
-            if (Input.GetKeyDown(cameraMode)) OnKeyCameraMode();
-            if (Input.GetKeyDown(resetScene)) OnKeyResetScene();
-            if (Input.GetKeyDown(timeSpeedUp)) OnKeyTimeSpeedUp();
-            if (Input.GetKeyDown(timeSpeedDown)) OnKeyTimeSpeedDown();
-            if (Input.GetMouseButtonDown(0)) OnClickSelect();
+            if (Input.GetKeyDown (selectionMode)) OnKeySelectionMode ();
+            if (Input.GetKeyDown (forceMode)) OnKeyForceMode ();
+            if (Input.GetKeyDown (letterbox)) OnKeyLetterbox ();
+            if (Input.GetKeyDown (throwPlayer)) OnKeyThrow ();
+            if (InputCharacterRotation != Quaternion.identity) InputCharacter = true;
+            else InputCharacter = false;
+            if (Input.GetKeyDown (cameraMode)) OnKeyCameraMode ();
+            if (Input.GetKeyDown (resetScene)) OnKeyResetScene ();
+            if (Input.GetKeyDown (timeSpeedUp)) OnKeyTimeSpeedUp ();
+            if (Input.GetKeyDown (timeSpeedDown)) OnKeyTimeSpeedDown ();
+            if (Input.GetMouseButtonDown (0)) OnClickSelect ();
         }
-        InputCameraDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        CameraOrbitDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        InputCameraDirection = new Vector3 (Input.GetAxisRaw ("Horizontal"), 0, Input.GetAxisRaw ("Vertical"));
+        CameraOrbitDirection = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
 
-        if (Input.GetMouseButton(1)) ControlCamera = true; else ControlCamera = false;
-        if (Input.GetKey(fastCamera)) FastCamera = true; else FastCamera = false;
+        if (Input.GetMouseButton (1)) ControlCamera = true;
+        else ControlCamera = false;
+        if (Input.GetKey (fastCamera)) FastCamera = true;
+        else FastCamera = false;
 
-        MouseAxis = new Vector2(Input.GetAxisRaw("Mouse X") / Time.timeScale, Input.GetAxisRaw("Mouse Y") / Time.timeScale);
+        MouseAxis = new Vector2 (Input.GetAxisRaw ("Mouse X") / Time.timeScale, Input.GetAxisRaw ("Mouse Y") / Time.timeScale);
     }
 
-    void FixedUpdate()
+    void FixedUpdate ()
     {
         InputCharacterRotation =
-        Quaternion.AngleAxis(Input.GetAxisRaw("Yaw") * 45, Vector3.right) *
-        Quaternion.AngleAxis(-Input.GetAxisRaw("Pitch") * 45, Vector3.forward) *
-        Quaternion.AngleAxis(Input.GetAxisRaw("Roll") * 45, Vector3.up);
+            Quaternion.AngleAxis (Input.GetAxisRaw ("Yaw") * 45, Vector3.right) *
+            Quaternion.AngleAxis (-Input.GetAxisRaw ("Pitch") * 45, Vector3.forward) *
+            Quaternion.AngleAxis (Input.GetAxisRaw ("Roll") * 45, Vector3.up);
     }
 }
