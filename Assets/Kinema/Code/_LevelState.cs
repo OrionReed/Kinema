@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class _LevelState : MonoBehaviour
 {
+    float tree = 1f;
     public static event Action OnIntro = delegate { };
     public static event Action OnPlay = delegate { };
     public static LevelState CurrentState { get; private set; }
