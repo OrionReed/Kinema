@@ -42,5 +42,6 @@ public class _TimeControl : MonoBehaviour
     {
         Time.timeScale = 1f / timeDivisions[scaleIndex];
         Time.fixedDeltaTime = 0.02F * Time.timeScale;
+        Debug.Log("timeScale: " + Time.timeScale + " fixedDeltaTime: " + Time.fixedDeltaTime);
     }
 }
